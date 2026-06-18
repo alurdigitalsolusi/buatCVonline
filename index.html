@@ -49,10 +49,10 @@
   <style>
     /* Transisi halus untuk perubahan tema Dark/Light */
     * {
-      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.1s ease;
     }
 
-    /* Kustomisasi scrollbar modern */
+    /* Kustomisasi scrollbar modern secara global */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -61,47 +61,57 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(156, 163, 175, 0.5);
-      border-radius: 4px;
+      background: rgba(156, 163, 175, 0.3);
+      border-radius: 9999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: rgba(156, 163, 175, 0.8);
+      background: rgba(156, 163, 175, 0.6);
+    }
+
+    /* Membedakan scrollbar area form dan area preview (Point 3) */
+    .form-scrollarea::-webkit-scrollbar-thumb {
+      background: rgba(0, 112, 243, 0.2);
+    }
+    .form-scrollarea::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 112, 243, 0.5);
+    }
+
+    .preview-scrollarea::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.2);
+    }
+    .preview-scrollarea::-webkit-scrollbar-thumb:hover {
+      background: rgba(100, 116, 139, 0.5);
     }
 
     /* Style khusus untuk rendering area preview kertas CV A4 agar proporsional */
     .preview-container {
       width: 100%;
       max-width: 800px;
-      min-height: 1120px; /* Rasio standar A4 */
+      min-height: 1128px; /* Rasio standar A4 */
       aspect-ratio: 1 / 1.4142;
-    }
-
-    /* Untuk menyembunyikan beberapa elemen saat print / ekspor html2pdf jika diperlukan */
-    .no-print {
-      display: none !important;
     }
 
     /* Gaya efek Glassmorphism */
     .glassmorphism {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
     .dark .glassmorphism {
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.8);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
   </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen font-sans flex flex-col antialiased">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 h-screen font-sans flex flex-col antialiased overflow-hidden">
 
   <!-- ==================== HEADER / NAVBAR ==================== -->
-  <header class="sticky top-0 z-40 w-full glassmorphism border-b border-slate-200/80 dark:border-slate-800/80 transition-all">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+  <header class="z-40 w-full glassmorphism border-b border-slate-200/80 dark:border-slate-800/80 shrink-0">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
       <!-- Logo Brand -->
       <div class="flex items-center space-x-3">
@@ -137,7 +147,7 @@
         </button>
 
         <!-- Reset Data -->
-        <button id="reset-btn" class="p-2.5 rounded-lg text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:text-rose-400 dark:hover:bg-rose-900/40 transition-colors flex items-center space-x-1.5" title="Reset Semua Data">
+        <button id="open-reset-modal" class="p-2.5 rounded-lg text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:text-rose-400 dark:hover:bg-rose-900/40 transition-colors flex items-center space-x-1.5" title="Reset Semua Data">
           <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
           <span class="text-sm font-semibold hidden sm:inline">Reset</span>
         </button>
@@ -153,15 +163,15 @@
   </header>
 
   <!-- Progress Bar Khusus Mobile -->
-  <div class="md:hidden w-full bg-slate-200 dark:bg-slate-800 h-1.5">
+  <div class="md:hidden w-full bg-slate-200 dark:bg-slate-800 h-1.5 shrink-0">
     <div id="completion-bar-mobile" class="bg-gradient-to-r from-brand-500 to-cyan-500 h-full w-0 transition-all duration-300"></div>
   </div>
 
   <!-- ==================== MAIN CONTENT ==================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+  <main class="flex-1 max-w-[1600px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
     
-    <!-- ==================== SISI KIRI: FORM INPUT (7 Kolom) ==================== -->
-    <section class="lg:col-span-6 space-y-6">
+    <!-- ==================== SISI KIRI: FORM INPUT (Gulir Mandiri) ==================== -->
+    <section class="lg:col-span-6 h-full overflow-y-auto form-scrollarea p-4 sm:p-6 lg:p-8 space-y-6 border-r border-slate-200/50 dark:border-slate-800/50">
       
       <!-- Bagian Kustomisasi Desain & Warna -->
       <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
@@ -170,7 +180,7 @@
           <span>Kustomisasi Desain CV</span>
         </h2>
         
-        <!-- Pilihan Template (7 Pilihan) -->
+        <!-- Pilihan Template -->
         <div>
           <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Pilih Template Profesional</label>
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -195,7 +205,7 @@
           </div>
         </div>
 
-        <!-- Pilihan Skema Warna (7 Pilihan) -->
+        <!-- Pilihan Skema Warna -->
         <div>
           <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Skema Warna Tema</label>
           <div class="flex flex-wrap gap-2.5">
@@ -220,20 +230,20 @@
             <span>Informasi Pribadi</span>
           </h2>
 
-          <!-- Upload & Crop Foto -->
+          <!-- Upload Foto -->
           <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 py-2">
             <div class="relative w-28 h-28 bg-slate-100 dark:bg-slate-700 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-slate-600 flex flex-col items-center justify-center cursor-pointer group" id="photo-box">
               <img id="photo-preview" class="w-full h-full object-cover hidden" alt="Foto Profil">
               <div id="photo-placeholder" class="text-center p-2">
                 <i data-lucide="camera" class="w-8 h-8 mx-auto text-slate-400 group-hover:text-brand-500 transition-colors"></i>
-                <span class="text-[10px] text-slate-400 mt-1 block">1x1 Crop</span>
+                <span class="text-[10px] text-slate-400 mt-1 block">Atur & Unggah</span>
               </div>
               <input type="file" id="photo-input" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*">
             </div>
             
             <div class="flex-1 space-y-2 text-center sm:text-left">
               <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Foto Profil Profesional</p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">Unggah foto format JPG/PNG. Sistem kami akan secara otomatis memotong dengan aspek rasio 1:1 sempurna untuk HR.</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Unggah foto format JPG/PNG. Kami menyediakan editor pop-up agar Anda dapat memotong, menggeser, dan memperbesar posisi foto profil dengan sempurna.</p>
               <button type="button" id="remove-photo-btn" class="hidden px-3 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/30 dark:text-rose-400 text-xs font-semibold rounded-lg transition-colors">Hapus Foto</button>
             </div>
           </div>
@@ -242,7 +252,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
-              <input type="text" id="input-fullname" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="Contoh: Muhammad Rafli">
+              <input type="text" id="input-fullname" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="Contoh: Bagus Alur">
             </div>
             <div>
               <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Pekerjaan / Jabatan Impian</label>
@@ -271,34 +281,32 @@
           </div>
         </div>
 
-        <!-- SECTION 2: RINGKASAN PROFIL + SIMULASI AI GENERATOR -->
+        <!-- SECTION 2: RINGKASAN PROFIL + CONTOH PROFESI (Point 5) -->
         <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 dark:border-slate-700 gap-2">
             <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
-              <i data-lucide="sparkles" class="w-5 h-5 text-brand-500 animate-pulse"></i>
-              <span>Ringkasan Profil & Optimasi AI</span>
+              <i data-lucide="book-open" class="w-5 h-5 text-brand-500"></i>
+              <span>Ringkasan Profil</span>
             </h2>
-            <!-- Simulasi Tombol Optimasi AI Professional -->
-            <button type="button" id="ai-generate-btn" class="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs rounded-lg flex items-center space-x-1.5 shadow-md shadow-orange-500/10 active:scale-95 transition-all">
-              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-              <span>Optimasi AI Premium</span>
+            <!-- Tombol Contoh Ringkasan Professional (Point 5) -->
+            <button type="button" id="open-examples-btn" class="px-3.5 py-1.5 bg-gradient-to-r from-brand-600 to-cyan-500 hover:from-brand-500 hover:to-cyan-400 text-white font-bold text-xs rounded-lg flex items-center space-x-1.5 shadow-md active:scale-95 transition-all">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>Contoh Ringkasan Professional</span>
             </button>
           </div>
 
           <div class="relative">
-            <textarea id="input-summary" rows="5" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all text-sm leading-relaxed" placeholder="Tuliskan deskripsi profesional diri Anda, keahlian utama, dan motivasi karir Anda dalam 3-4 kalimat..."></button></textarea>
+            <textarea id="input-summary" rows="5" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all text-sm leading-relaxed" placeholder="Tuliskan deskripsi profesional diri Anda, keahlian utama, dan motivasi karir Anda dalam 3-4 kalimat..."></textarea>
             
-            <!-- Animasi Loading Keren saat "AI" Memperbaiki -->
+            <!-- Animasi Loading Keren saat Contoh Professional Dimasukkan -->
             <div id="ai-loader" class="absolute inset-0 bg-white/95 dark:bg-slate-800/95 rounded-xl flex flex-col items-center justify-center space-y-3 hidden transition-all">
               <div class="relative w-12 h-12">
                 <div class="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-700"></div>
-                <div class="absolute inset-0 rounded-full border-4 border-amber-500 border-t-transparent animate-spin"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-brand-500 border-t-transparent animate-spin"></div>
               </div>
-              <p class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest animate-pulse">Menghasilkan CV Profesional via AI...</p>
+              <p class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest animate-pulse">Menyusun Ringkasan & Kompetensi...</p>
             </div>
           </div>
-
-          <p class="text-xs text-slate-400 dark:text-slate-500">💡 Klik tombol <strong>Optimasi AI Premium</strong> untuk mencocokkan bidang pekerjaan Anda secara otomatis ke format siap dilirik Rekruter!</p>
         </div>
 
         <!-- SECTION 3: PENGALAMAN KERJA (Dinamis) -->
@@ -335,7 +343,7 @@
           </div>
         </div>
 
-        <!-- SECTION 5: KEAHLIAN / SKILLS (Dinamis + Progress Bar) -->
+        <!-- SECTION 5: KEAHLIAN / SKILLS (Point 6 - Default 100% & Reactive) -->
         <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
           <div class="flex items-center justify-between border-b pb-3 dark:border-slate-700">
             <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
@@ -352,7 +360,7 @@
           </div>
         </div>
 
-        <!-- SECTION 6: BAHASA & SERTIFIKASI (Grid Kolom Sejajar) -->
+        <!-- SECTION 6: BAHASA & SERTIFIKASI (Point 7 - Layout Rapi, Tidak Meluap) -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           
           <!-- Bahasa -->
@@ -368,7 +376,7 @@
               </button>
             </div>
             <div id="language-list" class="space-y-3">
-              <!-- Render via JS -->
+              <!-- Render via JS dengan lebar adaptif -->
             </div>
           </div>
 
@@ -385,30 +393,38 @@
               </button>
             </div>
             <div id="certification-list" class="space-y-3">
-              <!-- Render via JS -->
+              <!-- Render via JS dengan lebar adaptif -->
             </div>
           </div>
 
         </div>
 
-        <!-- SECTION 7: KATEGORI KUSTOM DINAMIS (Prestasi, Organisasi, Pelatihan) -->
+        <!-- SECTION 7: BAGIAN TAMBAHAN KUSTOM (Point 8 - Chips Rekomendasi) -->
         <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 dark:border-slate-700 gap-2">
-            <div class="flex items-center space-x-2">
+          <div class="border-b pb-3 dark:border-slate-700">
+            <div class="flex items-center space-x-2 mb-2">
               <i data-lucide="folder-plus" class="w-5 h-5 text-brand-500"></i>
               <h2 class="text-lg font-bold text-slate-800 dark:text-white">Bagian Tambahan Kustom</h2>
             </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500">Pilih salah satu saran kategori berikut untuk menambahkannya ke dalam CV Anda:</p>
             
-            <div class="flex items-center space-x-2">
-              <select id="custom-category-select" class="text-xs bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 font-semibold">
-                <option value="Organisasi">Organisasi</option>
-                <option value="Prestasi & Penghargaan">Prestasi & Penghargaan</option>
-                <option value="Pelatihan & Kursus">Pelatihan & Kursus</option>
-                <option value="Proyek Sampingan">Proyek Sampingan</option>
-              </select>
-              <button type="button" id="add-custom-btn" class="px-3 py-1.5 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50 font-bold text-xs rounded-lg flex items-center space-x-1 transition-colors">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-                <span>Tambah</span>
+            <!-- Chips Rekomendasi (Menggantikan dropdown, Point 8) -->
+            <div class="flex flex-wrap gap-2 mt-3">
+              <button type="button" onclick="addCustomItem('Prestasi & Penghargaan')" class="px-3 py-1.5 text-xs font-semibold rounded-full bg-slate-100 hover:bg-brand-100 hover:text-brand-600 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors flex items-center space-x-1">
+                <i data-lucide="award" class="w-3 h-3"></i>
+                <span>+ Prestasi & Penghargaan</span>
+              </button>
+              <button type="button" onclick="addCustomItem('Organisasi')" class="px-3 py-1.5 text-xs font-semibold rounded-full bg-slate-100 hover:bg-brand-100 hover:text-brand-600 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors flex items-center space-x-1">
+                <i data-lucide="users" class="w-3 h-3"></i>
+                <span>+ Organisasi</span>
+              </button>
+              <button type="button" onclick="addCustomItem('Pelatihan & Kursus')" class="px-3 py-1.5 text-xs font-semibold rounded-full bg-slate-100 hover:bg-brand-100 hover:text-brand-600 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors flex items-center space-x-1">
+                <i data-lucide="book-open" class="w-3 h-3"></i>
+                <span>+ Pelatihan & Kursus</span>
+              </button>
+              <button type="button" onclick="addCustomItem('Proyek Sampingan')" class="px-3 py-1.5 text-xs font-semibold rounded-full bg-slate-100 hover:bg-brand-100 hover:text-brand-600 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors flex items-center space-x-1">
+                <i data-lucide="code" class="w-3 h-3"></i>
+                <span>+ Proyek Sampingan</span>
               </button>
             </div>
           </div>
@@ -421,37 +437,114 @@
       </form>
     </section>
 
-    <!-- ==================== SISI KANAN: REAL-TIME PREVIEW ==================== -->
-    <section class="lg:col-span-6 flex flex-col items-center">
+    <!-- ==================== SISI KANAN: REAL-TIME PREVIEW (Gulir Mandiri) ==================== -->
+    <section class="lg:col-span-6 h-full overflow-y-auto preview-scrollarea p-4 sm:p-6 lg:p-8 bg-slate-100/50 dark:bg-slate-900/20 flex flex-col items-center space-y-4">
       
-      <!-- Panel Sticky agar preview tetap terlihat saat scroll di desktop -->
-      <div class="sticky top-24 w-full flex flex-col items-center space-y-4">
-        
-        <div class="w-full flex items-center justify-between px-4 py-2 glassmorphism border border-slate-200 dark:border-slate-800 rounded-2xl">
-          <div class="flex items-center space-x-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Live Preview Real-time (A4)</span>
-          </div>
-          <div class="text-[11px] text-slate-400 font-medium">Auto-saved ke browser lokal</div>
+      <div class="w-full max-w-[800px] flex items-center justify-between px-4 py-2.5 glassmorphism border border-slate-200 dark:border-slate-800 rounded-2xl shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Live Preview Real-time (A4)</span>
         </div>
+        <div class="text-[11px] text-slate-400 font-medium">Auto-saved ke browser lokal</div>
+      </div>
 
-        <!-- AREA KERTAS PREVIEW UTAMA -->
-        <div class="preview-container bg-white text-slate-800 shadow-2xl rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/40 relative">
-          
-          <!-- Wrapper Skala agar pas dicetak (id untuk ekspor html2pdf) -->
-          <div id="cv-print-area" class="w-full h-full p-8 md:p-10 font-sans text-xs flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
-            <!-- Konten Dinamis di-render via Javascript berdasarkan Template dan Warna yang terpilih -->
-            <div id="render-target-content" class="h-full flex flex-col">
-              <!-- Template dimasukkan otomatis oleh JS -->
-            </div>
+      <!-- AREA KERTAS PREVIEW UTAMA -->
+      <div class="preview-container bg-white text-slate-800 shadow-2xl rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/40 relative shrink-0">
+        <!-- Wrapper Skala agar pas dicetak (id untuk ekspor html2pdf) -->
+        <div id="cv-print-area" class="w-full h-full p-8 md:p-10 font-sans text-xs flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+          <!-- Konten Dinamis di-render via Javascript berdasarkan Template dan Warna yang terpilih -->
+          <div id="render-target-content" class="h-full flex flex-col">
+            <!-- Template dimasukkan otomatis oleh JS -->
           </div>
-
         </div>
-
       </div>
     </section>
 
   </main>
+
+  <!-- ==================== POP-UP EDITOR FOTO PROFILE (Point 4) ==================== -->
+  <div id="crop-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-md w-full border border-slate-200 dark:border-slate-700 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-3 dark:border-slate-700">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+          <i data-lucide="crop" class="w-5 h-5 text-brand-500"></i>
+          <span>Atur Posisi & Ukuran Foto</span>
+        </h3>
+        <button type="button" onclick="closeCropModal()" class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Preview Canvas Drag-and-Drop / Zoom -->
+      <div class="flex flex-col items-center space-y-3">
+        <p class="text-xs text-slate-500 text-center">Gunakan slider untuk memperbesar foto, dan seret gambar di dalam bingkai untuk mengatur fokus terbaik Anda.</p>
+        
+        <div class="relative w-64 h-64 border-2 border-brand-500 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-900 cursor-move" id="crop-viewport">
+          <canvas id="crop-canvas" class="absolute top-0 left-0"></canvas>
+          <div class="absolute inset-0 border-4 border-white/40 pointer-events-none rounded-full"></div>
+        </div>
+
+        <div class="w-full space-y-1">
+          <div class="flex justify-between text-xs text-slate-400">
+            <span>Perkecil</span>
+            <span>Perbesar</span>
+          </div>
+          <input type="range" id="crop-zoom" min="0.1" max="3" step="0.05" value="1" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500">
+        </div>
+      </div>
+
+      <div class="flex space-x-3 pt-2">
+        <button type="button" onclick="closeCropModal()" class="flex-1 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+          Batal
+        </button>
+        <button type="button" id="save-crop-btn" class="flex-1 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-xs font-bold">
+          Simpan Posisi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== POP-UP MODAL CONTOH RINGKASAN PROFESSIONAL (Point 5) ==================== -->
+  <div id="examples-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-2xl w-full border border-slate-200 dark:border-slate-700 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-3 dark:border-slate-700">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center space-x-2">
+          <i data-lucide="sparkles" class="w-5 h-5 text-brand-500"></i>
+          <span>Contoh Ringkasan & Kompetensi Professional</span>
+        </h3>
+        <button type="button" onclick="closeExamplesModal()" class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500">Pilih salah satu profesi di bawah untuk memperbarui Ringkasan Profil dan Daftar Kompetensi secara otomatis dengan standar industri:</p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-80 overflow-y-auto p-1" id="profession-suggestions-grid">
+        <!-- List Tombol Profesi dimasukkan via Javascript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== KUSTOM MODAL KONFIRMASI RESET (Menggantikan confirm) ==================== -->
+  <div id="reset-confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/65 backdrop-blur-sm hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-sm w-full border border-slate-200 dark:border-slate-700 shadow-2xl space-y-4 text-center">
+      <div class="w-12 h-12 bg-rose-50 dark:bg-rose-950/30 text-rose-500 rounded-2xl flex items-center justify-center mx-auto shadow-md">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Kosongkan Semua Data?</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Apakah Anda yakin ingin menghapus semua data CV Anda? Tindakan ini tidak dapat dibatalkan.</p>
+      </div>
+      <div class="flex space-x-3 pt-2">
+        <button type="button" id="cancel-reset-btn" class="flex-1 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+          Batal
+        </button>
+        <button type="button" id="confirm-reset-btn" class="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold">
+          Ya, Reset Data
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ==================== MODAL PILIHAN EKSPOR PREMIUM & WATERMARK ==================== -->
   <div id="download-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
@@ -490,11 +583,9 @@
 
           <!-- Opsi 2: Tanpa Watermark (Hubungi WA) -->
           <a href="https://wa.me/6281234567890?text=Halo%20Alur%20Digital%20Solusi%2C%20saya%20tertarik%20dengan%20Resume%20Builder%20Premium%20tanpa%20watermark." target="_blank" class="w-full p-4 rounded-2xl bg-gradient-to-tr from-brand-600 to-cyan-600 hover:from-brand-500 hover:to-cyan-500 text-white text-left flex items-start space-x-3 shadow-lg shadow-brand-500/10 active:scale-[0.98] transition-all">
-            <div class="p-2 bg-white/20 rounded-xl text-white">
-              <i data-lucide="whatsapp" class="w-5 h-5">
-                <!-- SVG Alternatif WhatsApp untuk UI/UX mulus -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-              </i>
+            <div class="p-2 bg-white/20 rounded-xl text-white flex-shrink-0">
+              <!-- SVG Alternatif WhatsApp untuk UI/UX mulus -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
             </div>
             <div class="flex-1">
               <div class="flex items-center justify-between">
@@ -524,18 +615,12 @@
     </div>
   </div>
 
-  <!-- Footer Website -->
-  <footer class="mt-12 py-6 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-400 dark:text-slate-500">
-    <p>&copy; 2026 <strong>Alur Digital Solusi</strong>. Hak Cipta Dilindungi. Sempurna untuk Tutorial YouTube "Bikin Website Resume Builder AI dengan HTML, CSS, JS".</p>
-  </footer>
-
   <!-- ==================== LOGIKA UTAMA JAVASCRIPT ==================== -->
   <script>
     // Inisialisasi Ikon Lucide di awal rendering halaman
     lucide.createIcons();
 
     // ==================== STATE MANAJEMEN DATA ====================
-    // Menyimpan seluruh data form CV pengguna agar mudah disinkronkan ke LocalStorage
     let cvData = {
       template: 'classic',
       themeColor: '#0070f3',
@@ -556,107 +641,96 @@
       customSections: []
     };
 
-    // Database Simulasi AI untuk 10 Profesi Terpopuler di Indonesia
-    // Tanpa memanggil API backend, gratis, andal, aman, dan instan!
+    // Database Contoh Professional (Sesuai Point 5)
     const aiMockData = {
       "Senior Frontend Developer": {
         summary: "Senior Frontend Developer berpengalaman lebih dari 5 tahun dalam membangun aplikasi web modern yang cepat, aman, dan berskala besar. Ahli dalam optimasi performa client-side, arsitektur UI/UX yang responsif, dan integrasi API yang seamless untuk meningkatkan retensi pengguna.",
         skills: [
-          { name: "React.js & Next.js", level: "95" },
+          { name: "React.js & Next.js", level: "100" },
           { name: "Tailwind CSS & SASS", level: "90" },
-          { name: "TypeScript & ES6+", level: "92" },
-          { name: "RESTful API Integration", level: "88" },
-          { name: "Webpack & Vite Bundling", level: "85" }
+          { name: "TypeScript & ES6+", level: "95" },
+          { name: "RESTful API Integration", level: "90" }
         ]
       },
       "Data Analyst": {
         summary: "Data Analyst profesional yang ahli dalam mentransformasikan data kompleks menjadi insight bisnis strategis yang mudah dipahami. Terbiasa menangani big data untuk riset pasar, efisiensi operasional, dan prediksi tren bisnis menggunakan metode statistik canggih.",
         skills: [
-          { name: "Python (Pandas, NumPy)", level: "90" },
+          { name: "Python (Pandas, NumPy)", level: "100" },
           { name: "SQL Database & BigQuery", level: "95" },
-          { name: "Tableau & Power BI", level: "88" },
-          { name: "Analisis Statistik & A/B Testing", level: "85" },
-          { name: "Excel Advanced", level: "90" }
+          { name: "Tableau & Power BI", level: "90" },
+          { name: "Analisis Statistik & A/B Testing", level: "85" }
         ]
       },
       "UI/UX Designer": {
         summary: "UI/UX Designer kreatif berorientasi pada riset pengguna (user-centered design). Memiliki kemampuan merancang wireframe, user flow, dan desain antarmuka interaktif berkualitas tinggi yang menyeimbangkan estetika visual dengan fungsionalitas bisnis.",
         skills: [
-          { name: "Figma & Adobe XD", level: "95" },
-          { name: "User Research & Usability Testing", level: "88" },
-          { name: "Wireframing & Prototyping", level: "92" },
-          { name: "Design System Architecture", level: "85" },
-          { name: "Mobile App Design Guidelines", level: "90" }
+          { name: "Figma & Adobe XD", level: "100" },
+          { name: "User Research & Usability Testing", level: "90" },
+          { name: "Wireframing & Prototyping", level: "95" },
+          { name: "Design System Architecture", level: "85" }
         ]
       },
       "Digital Marketing Specialist": {
         summary: "Spesialis Pemasaran Digital dengan rekam jejak sukses mengelola kampanye iklan berbayar (paid ads) berskala nasional dengan ROI yang tinggi. Berpengalaman dalam strategi konten, SEO, dan optimasi konversi penjualan digital.",
         skills: [
-          { name: "Google Ads & Meta Ads", level: "92" },
+          { name: "Google Ads & Meta Ads", level: "100" },
           { name: "Search Engine Optimization (SEO)", level: "85" },
-          { name: "Google Analytics 4 & Tag Manager", level: "88" },
-          { name: "Content Marketing Strategy", level: "90" },
-          { name: "Copywriting & Social Media Analytics", level: "85" }
+          { name: "Google Analytics 4 & Tag Manager", level: "90" },
+          { name: "Content Marketing Strategy", level: "95" }
         ]
       },
       "Full Stack Developer": {
         summary: "Full Stack Engineer berpengalaman merancang arsitektur aplikasi web dari hulu ke hilir. Sangat menguasai interaksi basis data yang aman, pembuatan API yang efisien, serta pengembangan antarmuka pengguna yang sangat responsif.",
         skills: [
-          { name: "Node.js (Express.js)", level: "90" },
-          { name: "React.js / Vue.js", level: "88" },
-          { name: "MongoDB & PostgreSQL", level: "92" },
-          { name: "Docker & Cloud Deployment", level: "80" },
-          { name: "Keamanan Sistem & JWT Auth", level: "85" }
+          { name: "Node.js (Express.js)", level: "100" },
+          { name: "React.js / Vue.js", level: "90" },
+          { name: "MongoDB & PostgreSQL", level: "95" },
+          { name: "Docker & Cloud Deployment", level: "80" }
         ]
       },
       "Human Resources (HRD)": {
         summary: "Profesional Manajemen Sumber Daya Manusia (HR) yang terampil dalam rekrutmen karyawan, pengembangan budaya organisasi, dan manajemen kinerja tim. Terbukti sukses menyusun kurikulum pelatihan internal untuk meningkatkan produktivitas.",
         skills: [
-          { name: "Recruitment & Talent Acquisition", level: "95" },
+          { name: "Recruitment & Talent Acquisition", level: "100" },
           { name: "Performance Management (KPI/OKR)", level: "90" },
-          { name: "Employee Relations", level: "85" },
-          { name: "Undang-Undang Ketenagakerjaan", level: "88" },
-          { name: "HRIS Platforms", level: "80" }
+          { name: "Employee Relations", level: "95" },
+          { name: "Undang-Undang Ketenagakerjaan", level: "85" }
         ]
       },
       "Content Creator": {
         summary: "Kreator Konten Multimedia handal yang fokus pada pertumbuhan audiens digital di berbagai platform sosial media. Memiliki keahlian mendalam dalam video editing, riset algoritma, dan kerja sama branding dengan sponsor lokal maupun global.",
         skills: [
-          { name: "Adobe Premiere & CapCut Pro", level: "92" },
-          { name: "Social Media Algorithms", level: "88" },
+          { name: "Adobe Premiere & CapCut Pro", level: "100" },
+          { name: "Social Media Algorithms", level: "90" },
           { name: "Video Production & Lighting", level: "85" },
-          { name: "Community Management", level: "90" },
-          { name: "Creative Writing / Scripting", level: "85" }
+          { name: "Creative Writing / Scripting", level: "95" }
         ]
       },
       "Customer Relation Officer": {
         summary: "Spesialis Hubungan Pelanggan (CRM) yang penuh empati, berfokus menyelesaikan masalah konsumen secara cepat dan akurat. Mampu meningkatkan skor kepuasan pelanggan (CSAT) melalui komunikasi yang profesional dan solutif.",
         skills: [
-          { name: "Customer Service & Communication", level: "95" },
-          { name: "CRM Tools (Zendesk, Salesforce)", level: "85" },
-          { name: "Conflict Resolution & Negotiation", level: "90" },
-          { name: "Product Knowledge Management", level: "88" },
+          { name: "Customer Service & Communication", level: "100" },
+          { name: "CRM Tools (Zendesk, Salesforce)", level: "90" },
+          { name: "Conflict Resolution & Negotiation", level: "95" },
           { name: "Analytical Problem Solving", level: "85" }
         ]
       },
       "Project Manager": {
         summary: "Manajer Proyek bersertifikasi yang mahir mengendalikan ruang lingkup proyek, tenggat waktu, serta anggaran perusahaan. Memiliki gaya kepemimpinan kolaboratif menggunakan metodologi kerja Agile & Scrum modern.",
         skills: [
-          { name: "Project Management (Agile/Scrum)", level: "95" },
-          { name: "Budgeting & Resource Planning", level: "88" },
+          { name: "Project Management (Agile/Scrum)", level: "100" },
+          { name: "Budgeting & Resource Planning", level: "90" },
           { name: "Risk Management & Mitigation", level: "85" },
-          { name: "Jira, Trello, & Asana Tools", level: "90" },
-          { name: "Stakeholder Management", level: "92" }
+          { name: "Jira, Trello, & Asana Tools", level: "95" }
         ]
       },
       "Graphic Designer": {
         summary: "Desainer Grafis profesional dengan visualisasi estetis yang kuat dalam menerjemahkan pesan brand ke dalam aset media digital, identitas visual (logo), serta kebutuhan cetak promosi berkualitas tinggi.",
         skills: [
-          { name: "Adobe Illustrator & Photoshop", level: "95" },
-          { name: "Brand Identity Design", level: "90" },
-          { name: "Layout & Typography Rules", level: "88" },
-          { name: "Vector Art & Illustration", level: "85" },
-          { name: "Creative Brainstorming", level: "90" }
+          { name: "Adobe Illustrator & Photoshop", level: "100" },
+          { name: "Brand Identity Design", level: "95" },
+          { name: "Layout & Typography Rules", level: "90" },
+          { name: "Creative Brainstorming", level: "95" }
         ]
       }
     };
@@ -666,18 +740,18 @@
       loadSavedData();
       initTheme();
       setupEventListeners();
+      setupCropModal();
+      setupExamplesModal();
       renderAllLists();
       updateCompletionProgress();
-      renderLivePreview();
+      renderLivePreview(); // Dipastikan terpanggil dengan aman
     });
 
-    // ==================== ELEMEN SELEKTOR DOM ====================
     const form = document.getElementById('resume-form');
-    const previewContainer = document.getElementById('cv-print-area');
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
 
-    // ==================== TEMA GELAP / TERANG (Local Storage) ====================
+    // ==================== TEMA GELAP / TERANG ====================
     const darkToggle = document.getElementById('dark-mode-toggle');
     const darkIcon = document.getElementById('dark-icon');
     const lightIcon = document.getElementById('light-icon');
@@ -704,7 +778,7 @@
         document.documentElement.classList.add('dark');
         localStorage.setItem('theme', 'dark');
         darkIcon.classList.remove('hidden');
-        lightIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
       }
     });
 
@@ -720,7 +794,7 @@
       }, 3000);
     }
 
-    // ==================== PENYIMPANAN DATA & AUTO SAVE (Local Storage) ====================
+    // ==================== PENYIMPANAN DATA & AUTO SAVE ====================
     function saveToLocalStorage() {
       localStorage.setItem('cv_builder_data_2026', JSON.stringify(cvData));
       updateCompletionProgress();
@@ -754,7 +828,6 @@
             removeBtn.classList.remove('hidden');
           }
 
-          // Sinkronisasi Desain Pilihan & Warna
           updateTemplateSelectionUI();
           updateColorSelectionUI();
 
@@ -762,7 +835,7 @@
           console.error("Gagal parsing local storage data", e);
         }
       } else {
-        // Data Dummy Awal agar website langsung terlihat keren saat pertama kali dibuka!
+        // Data Default (Point 1 - Menggunakan placeholder foto berkualitas)
         cvData = {
           template: 'classic',
           themeColor: '#0070f3',
@@ -774,7 +847,7 @@
           linkedin: 'linkedin.com/in/bagusalur',
           website: 'alurdigitalsolusi.com',
           summary: 'Software Engineer berpengalaman lebih dari 5 tahun merancang arsitektur web modern yang responsif dan berkinerja tinggi. Sangat terampil dalam HTML5, CSS3, JavaScript modern, serta mengoptimalkan pengalaman pengguna di ranah digital.',
-          photo: '',
+          photo: 'https://placehold.co/150x150/0070f3/ffffff?text=BA', // Default Placeholder
           experiences: [
             { company: 'PT Alur Digital Solusi', role: 'Lead Frontend Developer', duration: '2023 - Sekarang', desc: 'Memimpin tim pengembang beranggotakan 6 orang untuk mendesain ulang platform SaaS utama perusahaan dan berhasil meningkatkan kepuasan pengguna sebesar 40%.' }
           ],
@@ -782,9 +855,9 @@
             { school: 'Universitas Indonesia', degree: 'Sarjana Ilmu Komputer', duration: '2015 - 2019', score: 'IPK 3.82' }
           ],
           skills: [
-            { name: 'JavaScript ES6+', level: '95' },
-            { name: 'Tailwind CSS & UI UX', level: '90' },
-            { name: 'Arsitektur Web Aman', level: '85' }
+            { name: 'JavaScript ES6+', level: '100' },
+            { name: 'Tailwind CSS & UI UX', level: '100' },
+            { name: 'Arsitektur Web Aman', level: '100' }
           ],
           languages: [
             { name: 'Bahasa Indonesia', proficiency: 'Native' },
@@ -794,7 +867,7 @@
             { name: 'Google UX Design Professional Certificate' }
           ],
           customSections: [
-            { category: 'Prestasi', title: 'Juara 1 Web Development Hackathon Nasional 2024' }
+            { category: 'Prestasi & Penghargaan', title: 'Juara 1 Web Development Hackathon Nasional 2024' }
           ]
         };
 
@@ -808,6 +881,14 @@
         document.getElementById('input-website').value = cvData.website;
         document.getElementById('input-summary').value = cvData.summary;
         
+        const preview = document.getElementById('photo-preview');
+        const placeholder = document.getElementById('photo-placeholder');
+        const removeBtn = document.getElementById('remove-photo-btn');
+        preview.src = cvData.photo;
+        preview.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        removeBtn.classList.remove('hidden');
+
         updateTemplateSelectionUI();
         updateColorSelectionUI();
       }
@@ -829,7 +910,6 @@
       if (cvData.educations.length > 0) score += 10;
       if (cvData.skills.length > 0) score += 10;
 
-      // Maksimalisasi skor pada 100%
       const percentage = Math.min(score, total);
       
       document.getElementById('completion-text').textContent = percentage + '%';
@@ -840,7 +920,6 @@
     // ==================== HANDLER EVENT LISTENER FORM INPUT ====================
     function setupEventListeners() {
       
-      // Sinkronisasi instan input teks biasa ke state data
       const textBindings = [
         { id: 'input-fullname', key: 'fullname' },
         { id: 'input-title', key: 'title' },
@@ -860,73 +939,32 @@
         });
       });
 
-      // Pemotong & Handler Foto Profil Aman
-      const photoInput = document.getElementById('photo-input');
-      const photoPreview = document.getElementById('photo-preview');
-      const photoPlaceholder = document.getElementById('photo-placeholder');
+      // Hapus foto profil
       const removePhotoBtn = document.getElementById('remove-photo-btn');
-
-      photoInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          if (file.size > 2 * 1024 * 1024) {
-            showToast("Ukuran foto maksimal adalah 2MB!");
-            return;
-          }
-
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            const img = new Image();
-            img.onload = function() {
-              // Teknik Canvas client-side cropping 1:1 gratis, aman, dan instan!
-              const canvas = document.createElement('canvas');
-              const ctx = canvas.getContext('2d');
-              const size = Math.min(img.width, img.height);
-              canvas.width = size;
-              canvas.height = size;
-              
-              // Potong bagian tengah foto secara seimbang
-              ctx.drawImage(img, (img.width - size)/2, (img.height - size)/2, size, size, 0, 0, size, size);
-              const croppedBase64 = canvas.toDataURL('image/jpeg', 0.8);
-              
-              cvData.photo = croppedBase64;
-              photoPreview.src = croppedBase64;
-              photoPreview.classList.remove('hidden');
-              photoPlaceholder.classList.add('hidden');
-              removePhotoBtn.classList.remove('hidden');
-              
-              saveToLocalStorage();
-              showToast("Foto profil berhasil dipotong 1x1!");
-            };
-            img.src = evt.target.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
       removePhotoBtn.addEventListener('click', () => {
         cvData.photo = '';
+        const photoPreview = document.getElementById('photo-preview');
+        const photoPlaceholder = document.getElementById('photo-placeholder');
         photoPreview.src = '';
         photoPreview.classList.add('hidden');
         photoPlaceholder.classList.remove('hidden');
         removePhotoBtn.classList.add('hidden');
-        photoInput.value = '';
+        document.getElementById('photo-input').value = '';
         saveToLocalStorage();
         showToast("Foto profil dihapus.");
       });
 
-      // Tombol Tambah Riwayat Dinamis
+      // Tambah Riwayat Dinamis
       document.getElementById('add-experience-btn').addEventListener('click', () => addExperienceItem());
       document.getElementById('add-education-btn').addEventListener('click', () => addEducationItem());
       document.getElementById('add-skill-btn').addEventListener('click', () => addSkillItem());
       document.getElementById('add-language-btn').addEventListener('click', () => addLanguageItem());
       document.getElementById('add-certification-btn').addEventListener('click', () => addCertificationItem());
-      document.getElementById('add-custom-btn').addEventListener('click', () => addCustomItem());
 
       // Selector Template & Warna
       document.querySelectorAll('.template-selector').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          cvData.template = e.target.getAttribute('data-template');
+          cvData.template = e.currentTarget.getAttribute('data-template');
           updateTemplateSelectionUI();
           saveToLocalStorage();
         });
@@ -934,57 +972,29 @@
 
       document.querySelectorAll('.color-selector').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          cvData.themeColor = e.target.getAttribute('data-color');
+          cvData.themeColor = e.currentTarget.getAttribute('data-color');
           updateColorSelectionUI();
           saveToLocalStorage();
         });
       });
 
-      // Reset Button Handler
-      document.getElementById('reset-btn').addEventListener('click', () => {
-        if (confirm("Apakah Anda yakin ingin menghapus semua data CV Anda? Tindakan ini tidak bisa dibatalkan.")) {
-          localStorage.removeItem('cv_builder_data_2026');
-          location.reload();
-        }
+      // Pengaturan Custom Reset Modal (Point 3 / Custom Dialogues)
+      const openResetBtn = document.getElementById('open-reset-modal');
+      const resetModal = document.getElementById('reset-confirm-modal');
+      const cancelResetBtn = document.getElementById('cancel-reset-btn');
+      const confirmResetBtn = document.getElementById('confirm-reset-btn');
+
+      openResetBtn.addEventListener('click', () => {
+        resetModal.classList.remove('hidden');
       });
 
-      // Simulasi "AI" Generator Sesuai Bidang Pekerjaan saat ini
-      const aiBtn = document.getElementById('ai-generate-btn');
-      const aiLoader = document.getElementById('ai-loader');
+      cancelResetBtn.addEventListener('click', () => {
+        resetModal.classList.add('hidden');
+      });
 
-      aiBtn.addEventListener('click', () => {
-        const jobTitle = document.getElementById('input-title').value.trim();
-        
-        // Deteksi profesi yang cocok dari database statis kita
-        let matchedProfession = "Senior Frontend Developer"; // Default fallback
-        const titlesInDb = Object.keys(aiMockData);
-        
-        const found = titlesInDb.find(title => jobTitle.toLowerCase().includes(title.toLowerCase()) || title.toLowerCase().includes(jobTitle.toLowerCase()));
-        if (found) {
-          matchedProfession = found;
-        }
-
-        const dataProfesi = aiMockData[matchedProfession];
-
-        // Tampilkan animasi loading keren
-        aiLoader.classList.remove('hidden');
-        aiBtn.disabled = true;
-
-        setTimeout(() => {
-          // Isi data AI tiruan ke form secara visual dan simpan ke state data
-          cvData.summary = dataProfesi.summary;
-          document.getElementById('input-summary').value = dataProfesi.summary;
-
-          // Tambahkan keahlian modern yang cocok
-          cvData.skills = [...dataProfesi.skills];
-          
-          aiLoader.classList.add('hidden');
-          aiBtn.disabled = false;
-
-          renderAllLists();
-          saveToLocalStorage();
-          showToast(`CV Anda berhasil dioptimalkan untuk bidang ${matchedProfession}!`);
-        }, 1500); // Simulasi pemrosesan AI 1.5 detik
+      confirmResetBtn.addEventListener('click', () => {
+        localStorage.removeItem('cv_builder_data_2026');
+        location.reload();
       });
 
       // MODAL EKSPOR PDF MANAGEMENT
@@ -1015,17 +1025,14 @@
         if (e.target === modal) closeModal();
       });
 
-      // Ekspor PDF Sebenarnya dengan html2pdf.js gratis
       downloadWatermarkBtn.addEventListener('click', () => {
         closeModal();
         showToast("Sedang memproses PDF Anda...");
 
-        // Elemen kontainer cetak
         const element = document.getElementById('cv-print-area');
         
-        // Buat watermark visual sementara di area cetak sebelum dikonversi
         const watermark = document.createElement('div');
-        watermark.className = "flex items-center justify-between mt-4 pt-3 border-t border-slate-200/50 text-slate-400 text-[9px] font-medium italic";
+        watermark.className = "flex items-center justify-between mt-4 pt-3 border-t border-slate-200/50 text-slate-400 text-[9px] font-medium italic shrink-0";
         watermark.innerHTML = `
           <span>Dibuat Gratis via Resume Builder - Alur Digital Solusi</span>
           <span>CV Profesional 2026 - ATS Friendly</span>
@@ -1033,29 +1040,210 @@
         element.appendChild(watermark);
 
         const opt = {
-          margin: 0,
+          margin: [4, 4, 4, 4],
           filename: `CV_${cvData.fullname.replace(/\s+/g, '_') || 'Resume'}.pdf`,
           image: { type: 'jpeg', quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true, logging: false },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        // Jalankan library html2pdf
         html2pdf().from(element).set(opt).save().then(() => {
-          // Hapus kembali watermark dari preview setelah selesai di-ekspor
           element.removeChild(watermark);
           showToast("CV Anda berhasil diunduh!");
         }).catch(err => {
           console.error(err);
-          // Hapus watermark jika terjadi error
           if(element.contains(watermark)) element.removeChild(watermark);
           showToast("Gagal mengunduh PDF. Silakan coba kembali.");
         });
       });
-
     }
 
-    // ==================== FUNGSI MEMUTAKHIRKAN UI SELEKTOR ====================
+    // ==================== LOGIKA POP-UP EDIT FOTO INTERAKTIF (Point 4) ====================
+    let sourceImage = new Image();
+    let cropScale = 1.0;
+    let cropX = 0;
+    let cropY = 0;
+    let isDragging = false;
+    let startX, startY;
+
+    function setupCropModal() {
+      const photoInput = document.getElementById('photo-input');
+      const canvas = document.getElementById('crop-canvas');
+      const ctx = canvas.getContext('2d');
+      const zoomInput = document.getElementById('crop-zoom');
+      const viewport = document.getElementById('crop-viewport');
+
+      canvas.width = 256;
+      canvas.height = 256;
+
+      photoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            sourceImage.src = event.target.result;
+            sourceImage.onload = () => {
+              cropScale = 1.0;
+              cropX = 0;
+              cropY = 0;
+              zoomInput.value = 1.0;
+              
+              const minRatio = Math.max(256 / sourceImage.width, 256 / sourceImage.height);
+              cropScale = minRatio;
+              zoomInput.min = minRatio;
+              zoomInput.max = minRatio * 4;
+              zoomInput.value = minRatio;
+
+              drawCropCanvas();
+              document.getElementById('crop-modal').classList.remove('hidden');
+            };
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      zoomInput.addEventListener('input', (e) => {
+        cropScale = parseFloat(e.target.value);
+        drawCropCanvas();
+      });
+
+      viewport.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - cropX;
+        startY = e.clientY - cropY;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          cropX = e.clientX - startX;
+          cropY = e.clientY - startY;
+          drawCropCanvas();
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      viewport.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const touch = e.touches[0];
+        startX = touch.clientX - cropX;
+        startY = touch.clientY - cropY;
+      });
+
+      viewport.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+          const touch = e.touches[0];
+          cropX = touch.clientX - startX;
+          cropY = touch.clientY - startY;
+          drawCropCanvas();
+        }
+      });
+
+      viewport.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+
+      document.getElementById('save-crop-btn').addEventListener('click', () => {
+        const outCanvas = document.createElement('canvas');
+        outCanvas.width = 150;
+        outCanvas.height = 150;
+        const outCtx = outCanvas.getContext('2d');
+
+        outCtx.drawImage(canvas, 0, 0, 256, 256, 0, 0, 150, 150);
+        const croppedBase64 = outCanvas.toDataURL('image/jpeg', 0.85);
+
+        cvData.photo = croppedBase64;
+        const preview = document.getElementById('photo-preview');
+        const placeholder = document.getElementById('photo-placeholder');
+        const removeBtn = document.getElementById('remove-photo-btn');
+        preview.src = croppedBase64;
+        preview.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        removeBtn.classList.remove('hidden');
+
+        closeCropModal();
+        saveToLocalStorage();
+        showToast("Foto profil berhasil disesuaikan!");
+      });
+    }
+
+    function drawCropCanvas() {
+      const canvas = document.getElementById('crop-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 256, 256);
+
+      const w = sourceImage.width * cropScale;
+      const h = sourceImage.height * cropScale;
+
+      const minX = 256 - w;
+      const minY = 256 - h;
+      cropX = Math.min(0, Math.max(minX, cropX));
+      cropY = Math.min(0, Math.max(minY, cropY));
+
+      ctx.drawImage(sourceImage, cropX, cropY, w, h);
+    }
+
+    window.closeCropModal = function() {
+      document.getElementById('crop-modal').classList.add('hidden');
+      document.getElementById('photo-input').value = '';
+    }
+
+    // ==================== LOGIKA MODAL CONTOH RINGKASAN PROFESSIONAL (Point 5) ====================
+    function setupExamplesModal() {
+      const grid = document.getElementById('profession-suggestions-grid');
+      grid.innerHTML = '';
+
+      Object.keys(aiMockData).forEach(title => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = "flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-brand-50/50 dark:hover:bg-brand-950/20 text-left transition-all group";
+        btn.innerHTML = `
+          <div>
+            <p class="text-xs font-bold text-slate-800 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400">${title}</p>
+            <p class="text-[10px] text-slate-400 mt-0.5 line-clamp-1">${aiMockData[title].summary}</p>
+          </div>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 group-hover:text-brand-500 transition-colors"></i>
+        `;
+        
+        btn.addEventListener('click', () => {
+          applyProfessionExample(title);
+        });
+
+        grid.appendChild(btn);
+      });
+      lucide.createIcons();
+
+      document.getElementById('open-examples-btn').addEventListener('click', () => {
+        document.getElementById('examples-modal').classList.remove('hidden');
+      });
+    }
+
+    function applyProfessionExample(title) {
+      closeExamplesModal();
+      const loader = document.getElementById('ai-loader');
+      loader.classList.remove('hidden');
+
+      setTimeout(() => {
+        const match = aiMockData[title];
+        cvData.summary = match.summary;
+        document.getElementById('input-summary').value = match.summary;
+
+        cvData.skills = match.skills.map(s => ({ name: s.name, level: s.level }));
+        
+        loader.classList.add('hidden');
+        renderSkillsList();
+        saveToLocalStorage();
+        showToast(`Template ringkasan untuk "${title}" berhasil diterapkan!`);
+      }, 1200);
+    }
+
+    window.closeExamplesModal = function() {
+      document.getElementById('examples-modal').classList.add('hidden');
+    }
+
+    // ==================== FUNGSI MUTAKHIRKAN SELEKTOR UI ====================
     function updateTemplateSelectionUI() {
       document.querySelectorAll('.template-selector').forEach(btn => {
         const val = btn.getAttribute('data-template');
@@ -1115,7 +1303,7 @@
             </div>
             <div class="sm:col-span-2">
               <label class="block text-[10px] font-bold text-slate-400 uppercase">Deskripsi Tanggung Jawab & Prestasi</label>
-              <textarea rows="2" oninput="updateExperienceItem(${index}, 'desc', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Tuliskan kontribusi Anda yang diukur dengan data kuantitatif jika memungkinkan...">${item.desc || ''}</textarea>
+              <textarea rows="2" oninput="updateExperienceItem(${index}, 'desc', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Tuliskan kontribusi Anda...">${item.desc || ''}</textarea>
             </div>
           </div>
         `;
@@ -1192,7 +1380,7 @@
       saveToLocalStorage();
     };
 
-    // KEAHLIAN / SKILLS
+    // KEAHLIAN / SKILLS (Point 6 - Default 100%)
     function renderSkillsList() {
       const container = document.getElementById('skills-list');
       container.innerHTML = '';
@@ -1203,8 +1391,8 @@
         div.innerHTML = `
           <input type="text" value="${item.name || ''}" oninput="updateSkillItem(${index}, 'name', this.value)" class="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Keahlian (Contoh: Javascript)">
           <div class="w-32 flex items-center space-x-2">
-            <input type="range" min="0" max="100" value="${item.level || '50'}" oninput="updateSkillItem(${index}, 'level', this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500">
-            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 w-8 text-right">${item.level || '50'}%</span>
+            <input type="range" min="0" max="100" value="${item.level || '100'}" oninput="updateSkillLevelSlider(${index}, this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500">
+            <span id="skill-level-text-${index}" class="text-[10px] font-bold text-slate-500 dark:text-slate-400 w-8 text-right">${item.level || '100'}%</span>
           </div>
           <button type="button" onclick="deleteSkillItem(${index})" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
         `;
@@ -1214,7 +1402,7 @@
     }
 
     function addSkillItem() {
-      cvData.skills.push({ name: '', level: '80' });
+      cvData.skills.push({ name: '', level: '100' }); // Default 100% (Point 6)
       renderSkillsList();
       saveToLocalStorage();
     }
@@ -1224,24 +1412,33 @@
       saveToLocalStorage();
     }
 
+    // Reactive Updates Level Keahlian (Point 6)
+    window.updateSkillLevelSlider = function(index, value) {
+      cvData.skills[index].level = value;
+      document.getElementById(`skill-level-text-${index}`).textContent = value + '%';
+      saveToLocalStorage();
+    }
+
     window.deleteSkillItem = function(index) {
       cvData.skills.splice(index, 1);
       renderSkillsList();
       saveToLocalStorage();
     };
 
-    // BAHASA
+    // BAHASA (Point 7 - Layout Rapi)
     function renderLanguageList() {
       const container = document.getElementById('language-list');
       container.innerHTML = '';
 
       cvData.languages.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = "flex items-center space-x-2 bg-slate-50/50 dark:bg-slate-900/40 p-2 rounded-xl border border-slate-100 dark:border-slate-700";
+        div.className = "flex flex-col space-y-2 bg-slate-50/50 dark:bg-slate-900/40 p-3 rounded-xl border border-slate-100 dark:border-slate-700";
         div.innerHTML = `
-          <input type="text" value="${item.name || ''}" oninput="updateLanguageItem(${index}, 'name', this.value)" class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Inggris/Mandarin">
-          <input type="text" value="${item.proficiency || ''}" oninput="updateLanguageItem(${index}, 'proficiency', this.value)" class="w-24 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Skor / Level">
-          <button type="button" onclick="deleteLanguageItem(${index})" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-3.5 h-3.5"></i></button>
+          <div class="flex items-center space-x-2 w-full">
+            <input type="text" value="${item.name || ''}" oninput="updateLanguageItem(${index}, 'name', this.value)" class="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: Inggris">
+            <input type="text" value="${item.proficiency || ''}" oninput="updateLanguageItem(${index}, 'proficiency', this.value)" class="w-24 shrink-0 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Level/Skor">
+            <button type="button" onclick="deleteLanguageItem(${index})" class="text-rose-500 hover:text-rose-700 flex-shrink-0"><i data-lucide="trash" class="w-4 h-4"></i></button>
+          </div>
         `;
         container.appendChild(div);
       });
@@ -1265,17 +1462,19 @@
       saveToLocalStorage();
     };
 
-    // SERTIFIKASI
+    // SERTIFIKASI (Point 7 - Layout Rapi)
     function renderCertificationList() {
       const container = document.getElementById('certification-list');
       container.innerHTML = '';
 
       cvData.certifications.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = "flex items-center space-x-2 bg-slate-50/50 dark:bg-slate-900/40 p-2 rounded-xl border border-slate-100 dark:border-slate-700";
+        div.className = "flex flex-col space-y-2 bg-slate-50/50 dark:bg-slate-900/40 p-3 rounded-xl border border-slate-100 dark:border-slate-700";
         div.innerHTML = `
-          <input type="text" value="${item.name || ''}" oninput="updateCertificationItem(${index}, 'name', this.value)" class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Nama Sertifikasi">
-          <button type="button" onclick="deleteCertificationItem(${index})" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-3.5 h-3.5"></i></button>
+          <div class="flex items-center space-x-2 w-full">
+            <input type="text" value="${item.name || ''}" oninput="updateCertificationItem(${index}, 'name', this.value)" class="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Nama Sertifikasi">
+            <button type="button" onclick="deleteCertificationItem(${index})" class="text-rose-500 hover:text-rose-700 flex-shrink-0"><i data-lucide="trash" class="w-4 h-4"></i></button>
+          </div>
         `;
         container.appendChild(div);
       });
@@ -1299,23 +1498,37 @@
       saveToLocalStorage();
     };
 
-    // BAGIAN DINAMIS TAMBAHAN KUSTOM
+    // BAGIAN DINAMIS TAMBAHAN KUSTOM (Point 8)
     function renderCustomSectionList() {
       const container = document.getElementById('custom-section-list');
       container.innerHTML = '';
 
       cvData.customSections.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = "p-4 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40 space-y-2 relative";
+        div.className = "p-4 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40 space-y-3 relative";
         div.innerHTML = `
           <button type="button" onclick="deleteCustomItem(${index})" class="absolute top-3 right-3 text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-4 h-4"></i></button>
-          <div class="grid grid-cols-1 gap-2">
-            <div>
-              <span class="inline-block text-[9px] font-extrabold bg-brand-100 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 px-2.5 py-1 rounded-md uppercase tracking-wider mb-2">${item.category}</span>
+          <div class="space-y-3">
+            <div class="flex items-center space-x-2">
+              <span class="inline-block text-[9px] font-extrabold bg-brand-100 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 px-2.5 py-1 rounded-md uppercase tracking-wider">${item.category}</span>
             </div>
-            <div>
-              <label class="block text-[10px] font-bold text-slate-400 uppercase">Judul & Penjelasan Singkat</label>
-              <textarea rows="2" oninput="updateCustomItem(${index}, 'title', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: Menjadi koordinator divisi humas dalam kegiatan pengabdian sosial tingkat provinsi...">${item.title || ''}</textarea>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="sm:col-span-2">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase">Nama Kegiatan / Penghargaan</label>
+                <input type="text" value="${item.title || ''}" oninput="updateCustomItem(${index}, 'title', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: Pengabdian Sosial Peduli Negeri / Juara I Coding Competition">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase">Penyelenggara / Tempat</label>
+                <input type="text" value="${item.institution || ''}" oninput="updateCustomItem(${index}, 'institution', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: Yayasan ADS / Universitas Indonesia">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase">Tahun / Periode</label>
+                <input type="text" value="${item.duration || ''}" oninput="updateCustomItem(${index}, 'duration', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: 2024 / Mei 2023 - Present">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-[10px] font-bold text-slate-400 uppercase">Deskripsi Kegiatan</label>
+                <textarea rows="2" oninput="updateCustomItem(${index}, 'desc', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Tuliskan detail tanggung jawab atau penghargaan yang diperoleh...">${item.desc || ''}</textarea>
+              </div>
             </div>
           </div>
         `;
@@ -1324,10 +1537,8 @@
       lucide.createIcons();
     }
 
-    function addCustomItem() {
-      const select = document.getElementById('custom-category-select');
-      const chosenCat = select.value;
-      cvData.customSections.push({ category: chosenCat, title: '' });
+    window.addCustomItem = function(category) {
+      cvData.customSections.push({ category: category, title: '', institution: '', duration: '', desc: '' });
       renderCustomSectionList();
       saveToLocalStorage();
     }
@@ -1343,57 +1554,37 @@
       saveToLocalStorage();
     };
 
-    // ==================== RENDERING LIVE PREVIEW (7 TEMPLATE PILIHAN) ====================
-    function renderLivePreview() {
-      const target = document.getElementById('render-target-content');
-      target.innerHTML = '';
 
-      // Tampilkan template terpilih sesuai data state
-      switch (cvData.template) {
-        case 'classic':
-          renderClassicTemplate(target);
-          break;
-        case 'modern-sidebar':
-          renderModernSidebarTemplate(target);
-          break;
-        case 'elegant-serif':
-          renderElegantSerifTemplate(target);
-          break;
-        case 'tech-developer':
-          renderTechDeveloperTemplate(target);
-          break;
-        case 'creative-split':
-          renderCreativeSplitTemplate(target);
-          break;
-        case 'academic-clean':
-          renderAcademicCleanTemplate(target);
-          break;
-        default:
-          renderClassicTemplate(target);
+    // ==================== GENERATOR TEMPLATE CV (Mendukung Foto Sempurna) ====================
+    function getPhotoHtml(color, extraClasses = '') {
+      // Point 1: Semua template CV menyertakan gambar, jika kosong diberikan fallback SVG yang premium
+      if (cvData.photo) {
+        return `<div class="shrink-0 overflow-hidden ${extraClasses}">
+                  <img src="${cvData.photo}" class="w-full h-full object-cover">
+                </div>`;
       }
+      return `<div class="shrink-0 flex items-center justify-center bg-slate-100 ${extraClasses}" style="border-color: ${color}50;">
+                <svg class="w-1/2 h-1/2 text-slate-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>`;
     }
 
     // --- TEMPLATE 1: CLASSIC EXECUTIVE (Default) ---
     function renderClassicTemplate(target) {
       const color = cvData.themeColor;
       
-      // Bagian Header Atas
       const headerHtml = `
-        <div class="flex items-start justify-between border-b-2 pb-5 mb-5" style="border-color: ${color};">
+        <div class="flex items-start justify-between border-b-2 pb-5 mb-5 shrink-0" style="border-color: ${color};">
           <div class="flex-1 min-w-0 pr-4">
             <h1 class="text-xl font-bold uppercase tracking-wider" style="color: #1e293b;">${cvData.fullname || 'NAMA LENGKAP'}</h1>
             <p class="text-xs font-bold mt-1 uppercase" style="color: ${color};">${cvData.title || 'PEKERJAAN IMPIAN'}</p>
             <p class="text-[10px] text-slate-500 mt-2 leading-relaxed max-w-xl">${cvData.summary || 'Tuliskan deskripsi ringkasan profesional Anda.'}</p>
           </div>
-          ${cvData.photo ? `
-            <div class="w-20 h-20 bg-slate-100 rounded-lg overflow-hidden border-2" style="border-color: ${color}; flex-shrink: 0;">
-              <img src="${cvData.photo}" class="w-full h-full object-cover">
-            </div>
-          ` : ''}
+          ${getPhotoHtml(color, 'w-20 h-20 rounded-lg border-2 border-slate-200')}
         </div>
       `;
 
-      // Bagian Kontak & Info Sosial
       const contacts = [];
       if (cvData.email) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">✉</span> ${cvData.email}</span>`);
       if (cvData.phone) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">☏</span> ${cvData.phone}</span>`);
@@ -1402,16 +1593,15 @@
       if (cvData.website) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">🌐</span> ${cvData.website}</span>`);
 
       const contactHtml = contacts.length > 0 ? `
-        <div class="flex flex-wrap gap-x-5 gap-y-2 text-[10px] text-slate-600 mb-5 pb-3 border-b border-slate-150">
+        <div class="flex flex-wrap gap-x-5 gap-y-2 text-[10px] text-slate-600 mb-5 pb-3 border-b border-slate-150 shrink-0">
           ${contacts.join('')}
         </div>
       ` : '';
 
-      // Render Kolom Konten Utama
       const contentHtml = `
-        <div class="grid grid-cols-12 gap-6 flex-1">
+        <div class="grid grid-cols-12 gap-6 flex-1 min-h-0">
           
-          <!-- Sisi Kiri: Pengalaman, Pendidikan, Bagian Tambahan -->
+          <!-- Sisi Kiri: Pengalaman, Pendidikan, Bagian Tambahan (Layout Identik) -->
           <div class="col-span-8 space-y-5">
             
             <!-- Pengalaman Kerja -->
@@ -1450,15 +1640,21 @@
               </div>
             </div>
 
-            <!-- Bagian Kustom -->
+            <!-- Bagian Kustom (Point 8 - Layout Menjadi Bagian yang Sama Persis) -->
             ${cvData.customSections.length > 0 ? `
               <div>
-                <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">INFORMASI TAMBAHAN</h2>
+                <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">BAGIAN TAMBAHAN KUSTOM</h2>
                 <div class="mt-3 space-y-3">
                   ${cvData.customSections.map(item => `
                     <div>
-                      <span class="inline-block text-[8px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded uppercase tracking-wider mb-1">${item.category}</span>
-                      <p class="text-[9px] text-slate-600 leading-relaxed">${item.title || ''}</p>
+                      <div class="flex justify-between items-start">
+                        <span class="font-bold text-slate-800">${item.title || 'Nama Kegiatan'}</span>
+                        <span class="text-[9px] text-slate-400 font-semibold">${item.duration || ''}</span>
+                      </div>
+                      <div class="flex justify-between text-[10px] mt-0.5 text-slate-600">
+                        <span class="font-semibold" style="color: ${color};">${item.category} ${item.institution ? `&bull; ${item.institution}` : ''}</span>
+                      </div>
+                      ${item.desc ? `<p class="text-[9px] text-slate-500 mt-1 leading-relaxed">${item.desc}</p>` : ''}
                     </div>
                   `).join('')}
                 </div>
@@ -1478,10 +1674,10 @@
                   <div>
                     <div class="flex justify-between text-[9px] font-medium text-slate-700 mb-0.5">
                       <span>${skill.name || 'Keahlian'}</span>
-                      <span>${skill.level || '50'}%</span>
+                      <span>${skill.level || '100'}%</span>
                     </div>
                     <div class="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
-                      <div class="h-full rounded-full" style="width: ${skill.level || '50'}%; background-color: ${color};"></div>
+                      <div class="h-full rounded-full" style="width: ${skill.level || '100'}%; background-color: ${color};"></div>
                     </div>
                   </div>
                 `).join('') : '<p class="text-[10px] text-slate-400 italic">Belum ada keahlian.</p>'}
@@ -1526,24 +1722,16 @@
       const renderHtml = `
         <div class="grid grid-cols-12 gap-6 h-full flex-1">
           <!-- Kolom Kiri: Sidebar Solid Berwarna -->
-          <div class="col-span-4 -m-8 mr-0 p-6 flex flex-col justify-between" style="background-color: #f8fafc; border-right: 1px solid #e2e8f0;">
+          <div class="col-span-4 -m-8 mr-0 p-6 flex flex-col justify-between shrink-0" style="background-color: #f8fafc; border-right: 1px solid #e2e8f0;">
             <div class="space-y-6">
-              <!-- Foto Profil Bulat -->
-              ${cvData.photo ? `
-                <div class="w-24 h-24 rounded-full overflow-hidden border-4 mx-auto" style="border-color: ${color};">
-                  <img src="${cvData.photo}" class="w-full h-full object-cover">
-                </div>
-              ` : `
-                <div class="w-24 h-24 rounded-full bg-slate-200 mx-auto flex items-center justify-center text-slate-400">
-                  <span class="text-xs font-bold">1x1</span>
-                </div>
-              `}
+              <!-- Foto Profil Sesuai Kebutuhan Template -->
+              ${getPhotoHtml(color, 'w-24 h-24 rounded-full overflow-hidden border-4 mx-auto border-slate-200')}
 
               <!-- Informasi Kontak -->
               <div class="space-y-3">
                 <h3 class="text-[10px] font-extrabold uppercase tracking-wider" style="color: ${color};">Hubungi Saya</h3>
                 <div class="space-y-2 text-[9px] text-slate-600">
-                  ${cvData.email ? `<div><p class="font-bold">Email:</p><p>${cvData.email}</p></div>` : ''}
+                  ${cvData.email ? `<div><p class="font-bold">Email:</p><p class="break-all">${cvData.email}</p></div>` : ''}
                   ${cvData.phone ? `<div><p class="font-bold">Telepon:</p><p>${cvData.phone}</p></div>` : ''}
                   ${cvData.address ? `<div><p class="font-bold">Domisili:</p><p>${cvData.address}</p></div>` : ''}
                   ${cvData.linkedin ? `<div><p class="font-bold">LinkedIn:</p><p>${cvData.linkedin}</p></div>` : ''}
@@ -1581,7 +1769,7 @@
               <div class="w-12 h-1 mt-2 rounded" style="background-color: ${color};"></div>
             </div>
 
-            <!-- Ringkasan -->
+            <!-- Tentang Saya -->
             <div>
               <h2 class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Tentang Saya</h2>
               <p class="text-[10px] text-slate-600 mt-1.5 leading-relaxed">${cvData.summary || 'Ketik ringkasan profil Anda di sini.'}</p>
@@ -1622,6 +1810,26 @@
                 `).join('')}
               </div>
             </div>
+
+            <!-- Kustom Section (Point 8 - Layout Sejajar) -->
+            ${cvData.customSections.length > 0 ? `
+              <div>
+                <h2 class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Tambahan & Prestasi</h2>
+                <div class="mt-2.5 space-y-2">
+                  ${cvData.customSections.map(item => `
+                    <div class="border-l-2 pl-3 py-0.5" style="border-color: ${color}50;">
+                      <div class="flex justify-between text-[10px]">
+                        <span class="font-bold text-slate-800">${item.title}</span>
+                        <span class="text-slate-400 text-[8px]">${item.duration || ''}</span>
+                      </div>
+                      <p class="text-[9px] font-bold" style="color: ${color};">${item.category} ${item.institution ? `| ${item.institution}` : ''}</p>
+                      ${item.desc ? `<p class="text-[9px] text-slate-500 mt-1 leading-relaxed">${item.desc}</p>` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
           </div>
         </div>
       `;
@@ -1635,27 +1843,29 @@
       const renderHtml = `
         <div class="font-serif h-full flex flex-col justify-between" style="color: #27272a;">
           
-          <!-- Bagian Centered Header -->
-          <div class="text-center pb-6 border-b border-zinc-200">
-            <h1 class="text-3xl font-elegant tracking-wide text-zinc-900">${cvData.fullname || 'Nama Lengkap'}</h1>
-            <p class="text-xs font-serif italic uppercase tracking-wider mt-1" style="color: ${color};">${cvData.title || 'Pekerjaan Impian'}</p>
-            
-            <!-- Kontak Sejajar Garis -->
-            <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[9px] text-zinc-500 mt-3 font-sans">
-              ${cvData.email ? `<span>${cvData.email}</span>` : ''}
-              ${cvData.phone ? `<span>&bull; ${cvData.phone}</span>` : ''}
-              ${cvData.address ? `<span>&bull; ${cvData.address}</span>` : ''}
-              ${cvData.linkedin ? `<span>&bull; linkedin: ${cvData.linkedin}</span>` : ''}
+          <!-- Header (Menggunakan Foto di Sebelah Nama secara Elegan) -->
+          <div class="flex items-center justify-between pb-6 border-b border-zinc-200 shrink-0">
+            <div class="text-left">
+              <h1 class="text-3xl font-elegant tracking-wide text-zinc-900">${cvData.fullname || 'Nama Lengkap'}</h1>
+              <p class="text-xs font-serif italic uppercase tracking-wider mt-1" style="color: ${color};">${cvData.title || 'Pekerjaan Impian'}</p>
+              
+              <!-- Kontak -->
+              <div class="flex flex-wrap gap-x-3 gap-y-1 text-[9px] text-zinc-500 mt-3 font-sans">
+                ${cvData.email ? `<span>${cvData.email}</span>` : ''}
+                ${cvData.phone ? `<span>&bull; ${cvData.phone}</span>` : ''}
+                ${cvData.address ? `<span>&bull; ${cvData.address}</span>` : ''}
+              </div>
             </div>
+            ${getPhotoHtml(color, 'w-20 h-20 rounded-full border-2 border-zinc-200')}
           </div>
 
           <!-- Ringkasan Profil -->
-          <div class="mt-5 text-center px-4">
+          <div class="mt-5 text-center px-4 shrink-0">
             <p class="text-[10px] italic leading-relaxed text-zinc-600">"${cvData.summary || 'Ringkasan profesional yang elegan.'}"</p>
           </div>
 
           <!-- Dua Kolom Serif -->
-          <div class="grid grid-cols-12 gap-6 mt-6 flex-1 text-left font-serif">
+          <div class="grid grid-cols-12 gap-6 mt-6 flex-1 text-left font-serif min-h-0">
             
             <!-- Pengalaman & Pendidikan (Kiri) -->
             <div class="col-span-8 space-y-5">
@@ -1689,6 +1899,25 @@
                   `).join('')}
                 </div>
               </div>
+
+              <!-- Kustom Section (Point 8 - Layout Sejajar) -->
+              ${cvData.customSections.length > 0 ? `
+                <div>
+                  <h3 class="text-[10px] font-bold uppercase tracking-widest border-b pb-1 mb-3 text-zinc-800">Bagian Kustom & Tambahan</h3>
+                  <div class="space-y-3">
+                    ${cvData.customSections.map(item => `
+                      <div>
+                        <div class="flex justify-between items-baseline text-[9px]">
+                          <span class="font-bold text-zinc-900">${item.title}</span>
+                          <span class="text-[8px] text-zinc-400 italic">${item.duration || ''}</span>
+                        </div>
+                        <p class="text-[9px] italic" style="color: ${color};">${item.category} ${item.institution ? `&bull; ${item.institution}` : ''}</p>
+                        ${item.desc ? `<p class="text-[9px] text-zinc-600 mt-1 leading-relaxed font-sans">${item.desc}</p>` : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
             </div>
 
             <!-- Skills, Sertifikat, Kustom (Kanan) -->
@@ -1730,19 +1959,20 @@
         <div class="font-mono h-full flex flex-col justify-between" style="color: #0f172a; background-color: #fafafa;">
           
           <!-- Terminal-like Header -->
-          <div class="bg-slate-900 -m-8 mr-0 ml-0 p-5 mb-5 rounded-t-lg text-white relative">
+          <div class="bg-slate-900 -m-8 mr-0 ml-0 p-5 mb-5 rounded-t-lg text-white relative shrink-0 flex items-center justify-between">
             <div class="absolute top-3 left-4 flex space-x-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             </div>
-            <div class="text-center">
-              <h1 class="text-lg font-bold">${cvData.fullname || 'developer@resume'}</h1>
-              <p class="text-[10px] text-emerald-400 mt-1">&gt; ${cvData.title || 'software engineer'}</p>
+            <div class="pl-12">
+              <h1 class="text-base font-bold">${cvData.fullname || 'developer@resume'}</h1>
+              <p class="text-[9px] text-emerald-400 mt-0.5">&gt; ${cvData.title || 'software engineer'}</p>
             </div>
+            ${getPhotoHtml(color, 'w-12 h-12 rounded border border-slate-700')}
           </div>
 
-          <div class="grid grid-cols-12 gap-6 flex-1 text-left">
+          <div class="grid grid-cols-12 gap-6 flex-1 text-left min-h-0">
             <!-- Kolom Konten Kiri (Keahlian & Kontak) -->
             <div class="col-span-4 space-y-5">
               <div>
@@ -1799,6 +2029,22 @@
                   `).join('')}
                 </div>
               </div>
+
+              <!-- Kustom Section (Point 8 - Layout Sejajar) -->
+              ${cvData.customSections.length > 0 ? `
+                <div>
+                  <h3 class="text-[9px] font-extrabold text-slate-400 tracking-wider border-b pb-1 uppercase mb-2">[#] CUSTOM_ACTIVITIES</h3>
+                  <div class="space-y-3">
+                    ${cvData.customSections.map(item => `
+                      <div>
+                        <p class="text-[9px] font-bold text-slate-800">&gt;&nbsp;${item.title} <span class="text-emerald-600">/ ${item.category}</span></p>
+                        <p class="text-[8px] text-slate-400 italic">${item.duration || ''} ${item.institution ? `| ${item.institution}` : ''}</p>
+                        ${item.desc ? `<p class="text-[8px] text-slate-600 mt-1 leading-relaxed">${item.desc}</p>` : ''}
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
             </div>
           </div>
 
@@ -1815,12 +2061,8 @@
         <div class="h-full flex flex-col justify-between" style="color: #334155;">
           
           <!-- Banner Atas Creative -->
-          <div class="flex items-center space-x-4 pb-5 border-b-2" style="border-color: ${color};">
-            ${cvData.photo ? `
-              <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 flex-shrink-0" style="border-color: ${color};">
-                <img src="${cvData.photo}" class="w-full h-full object-cover">
-              </div>
-            ` : ''}
+          <div class="flex items-center space-x-4 pb-5 border-b-2 shrink-0" style="border-color: ${color};">
+            ${getPhotoHtml(color, 'w-16 h-16 rounded-2xl border-2 border-slate-200')}
             <div>
               <h1 class="text-xl font-extrabold tracking-tight text-slate-900">${cvData.fullname || 'Nama Kreatif'}</h1>
               <p class="text-xs font-bold text-white px-2 py-0.5 rounded inline-block mt-1" style="background-color: ${color};">${cvData.title || 'Pekerjaan Kreatif'}</p>
@@ -1828,12 +2070,12 @@
           </div>
 
           <!-- Section Deskripsi Panjang -->
-          <div class="py-4 border-b border-slate-100">
+          <div class="py-4 border-b border-slate-100 shrink-0">
             <p class="text-[10px] leading-relaxed text-slate-600">${cvData.summary || 'Tulis ringkasan portofolio kreatif Anda.'}</p>
           </div>
 
           <!-- Creative Grid Layout -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1 mt-4 text-left">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1 mt-4 text-left min-h-0">
             
             <!-- Box Pengalaman Kerja -->
             <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
@@ -1852,7 +2094,7 @@
               </div>
             </div>
 
-            <!-- Box Pendidikan & Kompetensi -->
+            <!-- Box Pendidikan, Kompetensi & Tambahan -->
             <div class="space-y-4">
               
               <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
@@ -1869,6 +2111,24 @@
                   `).join('')}
                 </div>
               </div>
+
+              <!-- Kustom Section (Point 8 - Layout Sejajar) -->
+              ${cvData.customSections.length > 0 ? `
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                  <h3 class="text-[10px] font-extrabold uppercase tracking-wide flex items-center" style="color: ${color};">
+                    <span class="w-1.5 h-3 rounded-sm mr-1.5" style="background-color: ${color};"></span>
+                    <span>Tambahan & Kegiatan</span>
+                  </h3>
+                  <div class="space-y-2 text-[9px]">
+                    ${cvData.customSections.map(item => `
+                      <div>
+                        <p class="font-bold text-slate-800">${item.title}</p>
+                        <p class="text-slate-500">${item.category} ${item.institution ? `| ${item.institution}` : ''}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
 
               <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
                 <h3 class="text-[10px] font-extrabold uppercase tracking-wide flex items-center" style="color: ${color};">
@@ -1891,71 +2151,107 @@
       target.innerHTML = renderHtml;
     }
 
-    // --- TEMPLATE 6: ACADEMIC CLEAN (Pure Minimalist, Highly ATS-Friendly) ---
+    // --- TEMPLATE 6: ACADEMIC PURE (Point 2 - Perbaikan Layout Sempurna) ---
     function renderAcademicCleanTemplate(target) {
       const color = cvData.themeColor;
       
       const renderHtml = `
-        <div class="font-serif h-full flex flex-col justify-between" style="color: #111827; background-color: #ffffff;">
+        <div class="font-serif h-full flex flex-col justify-between" style="color: #1e293b; background-color: #ffffff;">
           
-          <!-- Pure Text Header -->
-          <div class="text-center pb-4 border-b">
-            <h1 class="text-2xl font-bold uppercase tracking-wide">${cvData.fullname || 'Nama Lengkap'}</h1>
-            <p class="text-xs italic text-slate-600 mt-1">${cvData.title || 'Bidang Akademis / Penelitian'}</p>
-            
-            <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[9px] text-slate-500 mt-2 font-sans">
-              ${cvData.email ? `<span>Email: ${cvData.email}</span>` : ''}
-              ${cvData.phone ? `<span>| Telp: ${cvData.phone}</span>` : ''}
-              ${cvData.address ? `<span>| Domisili: ${cvData.address}</span>` : ''}
+          <!-- Pure Text Header dengan Layout Tertata Rapi -->
+          <div class="flex items-start justify-between pb-5 border-b border-slate-200 shrink-0">
+            <div class="text-left space-y-1 max-w-[80%]">
+              <h1 class="text-2xl font-bold uppercase tracking-wide text-slate-900">${cvData.fullname || 'Nama Lengkap'}</h1>
+              <p class="text-xs italic text-slate-600 font-medium">${cvData.title || 'Bidang Akademis / Penelitian'}</p>
+              
+              <div class="flex flex-wrap gap-x-4 gap-y-1 text-[9px] text-slate-500 font-sans pt-1">
+                ${cvData.email ? `<span class="flex items-center">✉ ${cvData.email}</span>` : ''}
+                ${cvData.phone ? `<span class="flex items-center">| ☏ ${cvData.phone}</span>` : ''}
+                ${cvData.address ? `<span class="flex items-center">| 📍 ${cvData.address}</span>` : ''}
+              </div>
             </div>
+            <!-- Menyertakan Foto di Template 6 (Point 1 & 2) -->
+            ${getPhotoHtml(color, 'w-20 h-20 rounded border border-slate-300')}
           </div>
 
-          <!-- Academic Content Layout -->
-          <div class="mt-5 space-y-4 text-left">
+          <!-- Academic Content Layout - Rapi & Sempurna -->
+          <div class="mt-5 space-y-5 text-left flex-1 min-h-0">
             
+            <!-- Ringkasan Profesional -->
+            <div class="space-y-1">
+              <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Ringkasan Profesional</h3>
+              <p class="text-[9px] text-slate-600 leading-relaxed font-sans mt-1.5">${cvData.summary || 'Ketik ringkasan akademis Anda.'}</p>
+            </div>
+
             <!-- Pendidikan Paling Utama di Akademis -->
-            <div>
-              <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Pendidikan Terakhir</h3>
+            <div class="space-y-1">
+              <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Riwayat Pendidikan</h3>
               <div class="mt-2 space-y-2 text-[9px]">
-                ${cvData.educations.map(edu => `
-                  <div class="flex justify-between font-bold">
-                    <span>${edu.school} &mdash; ${edu.degree}</span>
-                    <span class="text-slate-400 font-normal">${edu.duration}</span>
+                ${cvData.educations.length > 0 ? cvData.educations.map(edu => `
+                  <div class="space-y-0.5">
+                    <div class="flex justify-between font-bold text-slate-800">
+                      <span>${edu.school}</span>
+                      <span class="text-slate-400 font-normal">${edu.duration}</span>
+                    </div>
+                    <div class="flex justify-between text-[9px] text-slate-500">
+                      <span>${edu.degree}</span>
+                      <span class="font-bold text-slate-600">${edu.score || ''}</span>
+                    </div>
                   </div>
-                  <p class="text-[8px] text-slate-500 -mt-1">Indeks Prestasi Kumulatif: ${edu.score}</p>
-                `).join('')}
+                `).join('') : '<p class="text-[9px] text-slate-400 italic">Belum ada riwayat pendidikan.</p>'}
               </div>
             </div>
 
-            <!-- Publikasi / Pengalaman Penelitian -->
-            <div>
+            <!-- Pengalaman Kerja & Organisasi -->
+            <div class="space-y-1">
               <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Pengalaman Kerja & Organisasi</h3>
               <div class="mt-2 space-y-3 text-[9px]">
-                ${cvData.experiences.map(exp => `
+                ${cvData.experiences.length > 0 ? cvData.experiences.map(exp => `
                   <div>
-                    <div class="flex justify-between font-bold">
+                    <div class="flex justify-between font-bold text-slate-800">
                       <span>${exp.role} @ ${exp.company}</span>
                       <span class="text-slate-400 font-normal">${exp.duration}</span>
                     </div>
                     <p class="text-slate-600 mt-1 leading-relaxed font-sans">${exp.desc}</p>
                   </div>
-                `).join('')}
+                `).join('') : '<p class="text-[9px] text-slate-400 italic">Belum ada riwayat pengalaman.</p>'}
               </div>
             </div>
 
+            <!-- Bagian Kustom Sejajar Layout (Point 8 & Point 2) -->
+            ${cvData.customSections.length > 0 ? `
+              <div class="space-y-1">
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Bagian Kustom & Tambahan</h3>
+                <div class="mt-2 space-y-3 text-[9px]">
+                  ${cvData.customSections.map(item => `
+                    <div>
+                      <div class="flex justify-between font-bold text-slate-800">
+                        <span>${item.title}</span>
+                        <span class="text-slate-400 font-normal">${item.duration || ''}</span>
+                      </div>
+                      <div class="flex justify-between text-[9px] text-slate-500 mt-0.5">
+                        <span class="font-bold" style="color: ${color};">${item.category} ${item.institution ? `| ${item.institution}` : ''}</span>
+                      </div>
+                      ${item.desc ? `<p class="text-slate-600 mt-1 leading-relaxed font-sans">${item.desc}</p>` : ''}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
             <!-- Sertifikasi & Kompetensi -->
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4 shrink-0 pt-2">
               <div>
-                <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Keahlian Riset</h3>
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Keahlian Riset & Teknis</h3>
                 <ul class="list-disc list-inside mt-2 text-[8px] text-slate-600 font-sans space-y-1">
-                  ${cvData.skills.map(s => `<li>${s.name}</li>`).join('')}
+                  ${cvData.skills.length > 0 ? cvData.skills.map(s => `<li>${s.name}</li>`) : '<li>Belum ada keahlian</li>'}
                 </ul>
               </div>
               
               <div>
                 <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Sertifikasi Ilmiah</h3>
                 <ul class="list-disc list-inside mt-2 text-[8px] text-slate-600 font-sans space-y-1">
-                  ${cvData.certifications.map(c => `<li>${c.name}</li>`).join('')}
+                  ${cvData.certifications.length > 0 ? cvData.certifications.map(c => `<li>${c.name}</li>`) : '<li>Belum ada sertifikasi</li>'}
                 </ul>
               </div>
             </div>
@@ -1965,6 +2261,36 @@
         </div>
       `;
       target.innerHTML = renderHtml;
+    }
+
+    // ==================== ORCHESTRATOR LIVE PREVIEW (7 TEMPLATE) ====================
+    window.renderLivePreview = function() {
+      const target = document.getElementById('render-target-content');
+      if (!target) return;
+      target.innerHTML = '';
+
+      switch (cvData.template) {
+        case 'classic':
+          renderClassicTemplate(target);
+          break;
+        case 'modern-sidebar':
+          renderModernSidebarTemplate(target);
+          break;
+        case 'elegant-serif':
+          renderElegantSerifTemplate(target);
+          break;
+        case 'tech-developer':
+          renderTechDeveloperTemplate(target);
+          break;
+        case 'creative-split':
+          renderCreativeSplitTemplate(target);
+          break;
+        case 'academic-clean':
+          renderAcademicCleanTemplate(target);
+          break;
+        default:
+          renderClassicTemplate(target);
+      }
     }
 
   </script>
