@@ -1,46 +1,44 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume Builder - Bikin CV Profesional dalam Hitungan Detik</title>
+  <title>Resume Builder - Alur Digital Solusi</title>
   
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS CDN untuk layout cepat & responsif -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Lucide Icons CDN -->
+  <!-- Lucide Icons untuk ikon modern & premium -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- html2pdf.js CDN -->
+  <!-- html2pdf.js untuk export PDF dari sisi client secara gratis & aman -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- Cropper.js (Untuk Pengepasan Foto Profil Wajah) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans untuk tipografi premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind Custom Config untuk Tema Premium -->
   <script>
+    // Konfigurasi Tailwind CSS kustom untuk tema gelap & font premium
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['Plus Jakarta Sans', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+            elegant: ['"Playfair Display"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
           },
           colors: {
             brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-              900: '#1e3a8a',
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0070f3', // Warna biru khas Alur Digital Solusi
+              600: '#005ec3',
+              700: '#004da3',
+              900: '#0f172a',
             }
           }
         }
@@ -48,13 +46,13 @@
     }
   </script>
 
-  <!-- Custom CSS untuk Glassmorphism -->
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
+    /* Transisi halus untuk perubahan tema Dark/Light */
+    * {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
     }
-    
-    /* Custom Scrollbar */
+
+    /* Kustomisasi scrollbar modern */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -63,442 +61,391 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 10px;
+      background: rgba(156, 163, 175, 0.5);
+      border-radius: 4px;
     }
-    .dark ::-webkit-scrollbar-thumb {
-      background: #475569;
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 163, 175, 0.8);
     }
 
-    /* Efek Glassmorphism Ringan */
-    .glass-card {
+    /* Style khusus untuk rendering area preview kertas CV A4 agar proporsional */
+    .preview-container {
+      width: 100%;
+      max-width: 800px;
+      min-height: 1120px; /* Rasio standar A4 */
+      aspect-ratio: 1 / 1.4142;
+    }
+
+    /* Untuk menyembunyikan beberapa elemen saat print / ekspor html2pdf jika diperlukan */
+    .no-print {
+      display: none !important;
+    }
+
+    /* Gaya efek Glassmorphism */
+    .glassmorphism {
       background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    .dark .glass-card {
-      background: rgba(15, 23, 42, 0.6);
+
+    .dark .glassmorphism {
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
-
-    /* Animasi Shimmer Loading AI */
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-    .shimmer-loading {
-      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite linear;
-    }
-    .dark .shimmer-loading {
-      background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite linear;
-    }
   </style>
 </head>
-<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-300 flex flex-col overflow-x-hidden">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen font-sans flex flex-col antialiased">
 
-  <!-- ================= NOTIFIKASI TOAST CUSTOM (PREMIUM) ================= -->
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
-
-  <!-- ================= MODAL KONFIRMASI RESET DATA ================= -->
-  <div id="resetModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-sm w-full shadow-xl">
-      <div class="flex items-center gap-3 text-red-500 mb-4">
-        <div class="p-2 bg-red-50 dark:bg-red-950/50 rounded-xl">
-          <i data-lucide="alert-triangle" class="w-6 h-6"></i>
-        </div>
-        <h4 class="font-bold text-md text-slate-900 dark:text-white">Kosongkan Semua Data?</h4>
-      </div>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-        Tindakan ini akan menghapus seluruh isian formulir dan draf CV yang tersimpan di browser Anda saat ini. Proses ini tidak dapat dibatalkan.
-      </p>
-      <div class="flex items-center justify-end gap-3">
-        <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
-          Batal
-        </button>
-        <button onclick="confirmResetData()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-red-600 hover:bg-red-700 shadow-md shadow-red-600/10 transition-colors cursor-pointer">
-          Ya, Hapus Semua
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= MODAL CROPPER.JS (FACE DETECTION) ================= -->
-  <div id="cropperModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-w-md w-full shadow-2xl flex flex-col max-h-[90vh]">
-      <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-950">
-        <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <i data-lucide="crop" class="w-4 h-4 text-brand-500"></i>
-          Paskan Area Wajah Anda
-        </h4>
-        <button onclick="closeCropperModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white cursor-pointer">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <div class="flex-1 p-6 bg-slate-950 flex items-center justify-center min-h-[250px] max-h-[450px]">
-        <img id="cropperImage" class="max-w-full max-h-full object-contain" src="">
-      </div>
-      <div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex justify-between items-center gap-3">
-        <!-- Kontrol Zoom & Putar -->
-        <div class="flex gap-1.5">
-          <button id="btnZoomIn" class="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 cursor-pointer">
-            <i data-lucide="zoom-in" class="w-4 h-4"></i>
-          </button>
-          <button id="btnZoomOut" class="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 cursor-pointer">
-            <i data-lucide="zoom-out" class="w-4 h-4"></i>
-          </button>
-          <button id="btnRotate" class="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 cursor-pointer">
-            <i data-lucide="rotate-cw" class="w-4 h-4"></i>
-          </button>
-        </div>
-        <!-- Pilihan Aksi Simpan -->
-        <div class="flex gap-2">
-          <button onclick="closeCropperModal()" class="px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 cursor-pointer">Batal</button>
-          <button id="btnCropApply" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow-lg shadow-brand-600/15 cursor-pointer">Terapkan Foto</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= MODAL WHATSAPP WATERMARK (PREMIUM WHATSAPP OFFER) ================= -->
-  <div id="waModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
-    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-sm w-full shadow-xl">
-      <div class="flex items-center gap-3 text-emerald-600 dark:text-emerald-400 mb-4">
-        <div class="p-2 bg-emerald-50 dark:bg-emerald-950/50 rounded-xl">
-          <i data-lucide="message-square" class="w-6 h-6"></i>
-        </div>
-        <h4 class="font-bold text-md text-slate-900 dark:text-white">Unduh Tanpa Watermark?</h4>
-      </div>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
-        PDF gratis Anda siap diunduh! File ini menyertakan watermark <strong>"Dibuat via Resume Builder - Alur Digital Solusi"</strong> di bagian bawah.
-      </p>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-        Jika Anda menginginkan file <strong>bersih tanpa watermark</strong>, silakan klik tombol WhatsApp untuk mengirimkan draf CV ini. Bayarnya sukarela/seikhlasnya saja, sekadar buat traktir kopi! ☕
-      </p>
-      <div class="flex flex-col sm:flex-row items-center justify-end gap-2.5">
-        <button onclick="closeWaModal()" class="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer text-center">
-          Batal
-        </button>
-        <button onclick="downloadWithWatermark()" class="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 transition-colors cursor-pointer text-center">
-          Unduh (Free)
-        </button>
-        <button onclick="contactWhatsApp()" class="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/10 transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5">
-          <i data-lucide="message-circle" class="w-4 h-4"></i>
-          Hubungi WA
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= HEADER / NAVIGATION ================= -->
-  <header class="sticky top-0 z-40 w-full glass-card border-b border-slate-200/80 dark:border-slate-800/80 transition-colors duration-300">
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 w-full glassmorphism border-b border-slate-200/80 dark:border-slate-800/80 transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="bg-brand-600 text-white p-2.5 rounded-xl shadow-md shadow-brand-500/20">
-          <i data-lucide="sparkles" class="w-6 h-6 animate-pulse"></i>
+      
+      <!-- Logo Brand -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-tr from-brand-600 to-cyan-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-500/20">
+          <i data-lucide="file-badge" class="w-6 h-6"></i>
         </div>
         <div>
-          <h1 class="text-lg font-extrabold font-display tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-            Resume<span class="bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">Builder</span>
-          </h1>
-          <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">AlurdiGital Solusi 2026</p>
+          <span class="font-extrabold text-lg bg-gradient-to-r from-brand-600 to-cyan-500 bg-clip-text text-transparent">
+            Resume Builder
+          </span>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wider uppercase">Alur Digital Solusi</p>
         </div>
       </div>
 
-      <!-- Quick Action Controls -->
-      <div class="flex items-center gap-3">
-        <!-- Tema Warna Template (Bonus) -->
-        <div class="hidden sm:flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 p-1.5 rounded-lg border border-slate-200/50 dark:border-slate-800">
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium px-1.5">Warna:</span>
-          <button onclick="changeTemplateColor('#2563eb')" class="w-5 h-5 rounded-full bg-blue-600 hover:scale-110 transition-transform cursor-pointer" title="Blue Professional"></button>
-          <button onclick="changeTemplateColor('#059669')" class="w-5 h-5 rounded-full bg-emerald-600 hover:scale-110 transition-transform cursor-pointer" title="Emerald Growth"></button>
-          <button onclick="changeTemplateColor('#4f46e5')" class="w-5 h-5 rounded-full bg-indigo-600 hover:scale-110 transition-transform cursor-pointer" title="Indigo Modern"></button>
-          <button onclick="changeTemplateColor('#dc2626')" class="w-5 h-5 rounded-full bg-red-600 hover:scale-110 transition-transform cursor-pointer" title="Elegant Red"></button>
-          <button onclick="changeTemplateColor('#1e293b')" class="w-5 h-5 rounded-full bg-slate-800 hover:scale-110 transition-transform cursor-pointer" title="Slate Minimalist"></button>
+      <!-- Fitur Bar Atas: Progress, Dark Mode, Reset -->
+      <div class="flex items-center space-x-3 sm:space-x-6">
+        
+        <!-- CV Completion Progress Bar -->
+        <div class="hidden md:flex flex-col items-end space-y-1">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">CV Completion:</span>
+            <span id="completion-text" class="text-xs font-bold text-brand-600 dark:text-brand-400">0%</span>
+          </div>
+          <div class="w-32 bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+            <div id="completion-bar" class="bg-gradient-to-r from-brand-500 to-cyan-500 h-full w-0 transition-all duration-500"></div>
+          </div>
         </div>
 
-        <!-- Dark Mode Toggle -->
-        <button id="themeToggle" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800 text-slate-600 dark:text-slate-300 transition-all cursor-pointer">
-          <i data-lucide="sun" id="sunIcon" class="w-5 h-5 hidden"></i>
-          <i data-lucide="moon" id="moonIcon" class="w-5 h-5"></i>
+        <!-- Toggle Mode Gelap/Terang -->
+        <button id="dark-mode-toggle" class="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:scale-105 transition-transform" title="Ganti Tema">
+          <i data-lucide="moon" id="dark-icon" class="w-5 h-5 hidden"></i>
+          <i data-lucide="sun" id="light-icon" class="w-5 h-5"></i>
         </button>
+
+        <!-- Reset Data -->
+        <button id="reset-btn" class="p-2.5 rounded-lg text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/30 dark:text-rose-400 dark:hover:bg-rose-900/40 transition-colors flex items-center space-x-1.5" title="Reset Semua Data">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          <span class="text-sm font-semibold hidden sm:inline">Reset</span>
+        </button>
+
+        <!-- Tombol Download Premium -->
+        <button id="open-download-modal" class="px-4 py-2.5 bg-gradient-to-r from-brand-600 to-cyan-600 hover:from-brand-500 hover:to-cyan-500 text-white font-bold text-sm rounded-xl flex items-center space-x-2 shadow-lg shadow-brand-500/20 active:scale-95 transition-all">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Unduh PDF</span>
+        </button>
+
       </div>
     </div>
   </header>
 
-  <!-- ================= MAIN CONTENT ================= -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <!-- Progress Bar Khusus Mobile -->
+  <div class="md:hidden w-full bg-slate-200 dark:bg-slate-800 h-1.5">
+    <div id="completion-bar-mobile" class="bg-gradient-to-r from-brand-500 to-cyan-500 h-full w-0 transition-all duration-300"></div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
     
-    <!-- LEFT COLUMN: FORM INPUT (SPAN 5) -->
-    <section class="lg:col-span-5 space-y-6 lg:max-h-[calc(100vh-140px)] lg:overflow-y-auto pr-1">
+    <!-- ==================== SISI KIRI: FORM INPUT (7 Kolom) ==================== -->
+    <section class="lg:col-span-6 space-y-6">
       
-      <!-- Resume Completion Progress (Bonus) -->
-      <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-        <div class="flex justify-between items-center mb-2">
-          <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
-            <i data-lucide="award" class="w-4 h-4 text-brand-500"></i>
-            Kualitas Resume Anda
-          </h3>
-          <span id="progressText" class="text-xs font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/50 px-2.5 py-1 rounded-full">0% Lengkap</span>
+      <!-- Bagian Kustomisasi Desain & Warna -->
+      <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+        <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
+          <i data-lucide="palette" class="w-5 h-5 text-brand-500"></i>
+          <span>Kustomisasi Desain CV</span>
+        </h2>
+        
+        <!-- Pilihan Template (7 Pilihan) -->
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Pilih Template Profesional</label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <button data-template="classic" class="template-selector px-3 py-2 text-xs font-semibold rounded-lg border-2 border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-600 dark:text-brand-400">
+              Classic Executive
+            </button>
+            <button data-template="modern-sidebar" class="template-selector px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              Modern Minimalist
+            </button>
+            <button data-template="elegant-serif" class="template-selector px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              Elegant Serif
+            </button>
+            <button data-template="tech-developer" class="template-selector px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              Tech / Developer
+            </button>
+            <button data-template="creative-split" class="template-selector px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              Creative Grid
+            </button>
+            <button data-template="academic-clean" class="template-selector px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700">
+              Academic Pure
+            </button>
+          </div>
         </div>
-        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
-          <div id="progressBar" class="bg-gradient-to-r from-brand-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+
+        <!-- Pilihan Skema Warna (7 Pilihan) -->
+        <div>
+          <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Skema Warna Tema</label>
+          <div class="flex flex-wrap gap-2.5">
+            <button data-color="#0070f3" class="color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 ring-2 ring-brand-500 bg-brand-500 active:scale-95 transition-transform" title="Royal Blue"></button>
+            <button data-color="#0f766e" class="color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 hover:ring-2 hover:ring-teal-500 bg-teal-700 active:scale-95 transition-transform" title="Emerald Teal"></button>
+            <button data-color="#1e1b4b" class="color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 hover:ring-2 hover:ring-indigo-900 bg-indigo-950 active:scale-95 transition-transform" title="Midnight Navy"></button>
+            <button data-color="#be185d" class="color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 hover:ring-2 hover:ring-pink-500 bg-pink-700 active:scale-95 transition-transform" title="Elegant Pink"></button>
+            <button data-color="#b45309" class="color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 hover:ring-2 hover:ring-amber-500 bg-amber-700 active:scale-95 transition-transform" title="Luxury Bronze"></button>
+            <button data-color="#374151" class="color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 hover:ring-2 hover:ring-slate-500 bg-gray-700 active:scale-95 transition-transform" title="Charcoal Dark"></button>
+            <button data-color="#15803d" class="color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 hover:ring-2 hover:ring-green-500 bg-green-700 active:scale-95 transition-transform" title="Professional Green"></button>
+          </div>
         </div>
       </div>
 
-      <!-- MAIN INPUT FORM CONTAINER -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm divide-y divide-slate-100 dark:divide-slate-800/80">
+      <!-- Form Utama CV -->
+      <form id="resume-form" class="space-y-6" onsubmit="event.preventDefault();">
         
-        <!-- Section 1: Informasi Pribadi -->
-        <div class="p-6 space-y-4">
-          <div class="flex items-center gap-2 pb-2">
-            <div class="p-1.5 bg-brand-50 dark:bg-brand-950 rounded-lg text-brand-600 dark:text-brand-400">
-              <i data-lucide="user" class="w-5 h-5"></i>
-            </div>
-            <h3 class="text-md font-bold font-display text-slate-900 dark:text-white">Informasi Pribadi</h3>
-          </div>
-          
-          <!-- Upload Foto Profil -->
-          <div class="flex items-center gap-4 py-2">
-            <div class="relative w-16 h-16 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden group">
-              <img id="avatarPreview" src="" class="w-full h-full object-cover hidden" alt="Avatar">
-              <i data-lucide="camera" id="avatarPlaceholder" class="w-6 h-6 text-slate-400"></i>
-            </div>
-            <div class="flex-1 space-y-1.5">
-              <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Foto Profil</label>
-              <div class="flex items-center gap-2">
-                <input type="file" id="inputPhoto" accept="image/*" class="text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 dark:file:bg-brand-950/50 dark:file:text-brand-400 cursor-pointer">
-                <button onclick="removeProfilePhoto()" id="btnRemovePhoto" class="hidden px-2.5 py-1.5 rounded-lg border border-red-200 dark:border-red-900/50 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 text-xs font-semibold transition-colors cursor-pointer">
-                  Hapus Foto
-                </button>
+        <!-- SECTION 1: PROFIL DASAR -->
+        <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+          <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white border-b pb-3 dark:border-slate-700">
+            <i data-lucide="user" class="w-5 h-5 text-brand-500"></i>
+            <span>Informasi Pribadi</span>
+          </h2>
+
+          <!-- Upload & Crop Foto -->
+          <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 py-2">
+            <div class="relative w-28 h-28 bg-slate-100 dark:bg-slate-700 rounded-xl overflow-hidden border-2 border-dashed border-slate-300 dark:border-slate-600 flex flex-col items-center justify-center cursor-pointer group" id="photo-box">
+              <img id="photo-preview" class="w-full h-full object-cover hidden" alt="Foto Profil">
+              <div id="photo-placeholder" class="text-center p-2">
+                <i data-lucide="camera" class="w-8 h-8 mx-auto text-slate-400 group-hover:text-brand-500 transition-colors"></i>
+                <span class="text-[10px] text-slate-400 mt-1 block">1x1 Crop</span>
               </div>
+              <input type="file" id="photo-input" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*">
+            </div>
+            
+            <div class="flex-1 space-y-2 text-center sm:text-left">
+              <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Foto Profil Profesional</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Unggah foto format JPG/PNG. Sistem kami akan secara otomatis memotong dengan aspek rasio 1:1 sempurna untuk HR.</p>
+              <button type="button" id="remove-photo-btn" class="hidden px-3 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/30 dark:text-rose-400 text-xs font-semibold rounded-lg transition-colors">Hapus Foto</button>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-2">
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Nama Lengkap</label>
-              <input type="text" id="inputFullName" placeholder="Masukkan nama lengkap" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+          <!-- Kolom input data utama -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
+              <input type="text" id="input-fullname" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="Contoh: Muhammad Rafli">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Email</label>
-              <input type="email" id="inputEmail" placeholder="nama@email.com" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Pekerjaan / Jabatan Impian</label>
+              <input type="text" id="input-title" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="Contoh: Senior Frontend Developer">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">No. Telepon</label>
-              <input type="tel" id="inputPhone" placeholder="+62 812..." class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
-            </div>
-            <div class="col-span-2">
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Alamat Lengkap</label>
-              <input type="text" id="inputAddress" placeholder="Kota, Negara" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Alamat Email</label>
+              <input type="email" id="input-email" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="nama@email.com">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">LinkedIn</label>
-              <input type="text" id="inputLinkedin" placeholder="linkedin.com/in/username" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Nomor Telepon / WA</label>
+              <input type="text" id="input-phone" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="+62 812 3456 7890">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Domisili (Alamat)</label>
+              <input type="text" id="input-address" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="Jakarta, Indonesia">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Website Pribadi</label>
-              <input type="text" id="inputWebsite" placeholder="portfolio.com" class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all">
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">LinkedIn URL</label>
+              <input type="url" id="input-linkedin" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="linkedin.com/in/username">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Website / Portofolio</label>
+              <input type="url" id="input-website" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="username.github.io">
             </div>
           </div>
         </div>
 
-        <!-- Section 2: Ringkasan Profil & AI Optimizer -->
-        <div class="p-6 space-y-4">
-          <div class="flex items-center justify-between pb-2">
-            <div class="flex items-center gap-2">
-              <div class="p-1.5 bg-brand-50 dark:bg-brand-950 rounded-lg text-brand-600 dark:text-brand-400">
-                <i data-lucide="file-text" class="w-5 h-5"></i>
-              </div>
-              <h3 class="text-md font-bold font-display text-slate-900 dark:text-white">Ringkasan Profil</h3>
-            </div>
-            
-            <!-- Tombol AI untuk Summary -->
-            <button onclick="improveSummaryWithAI()" class="flex items-center gap-1.5 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-md shadow-brand-500/10 cursor-pointer active:scale-95 transition-all">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-              Optimasi AI
+        <!-- SECTION 2: RINGKASAN PROFIL + SIMULASI AI GENERATOR -->
+        <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 dark:border-slate-700 gap-2">
+            <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
+              <i data-lucide="sparkles" class="w-5 h-5 text-brand-500 animate-pulse"></i>
+              <span>Ringkasan Profil & Optimasi AI</span>
+            </h2>
+            <!-- Simulasi Tombol Optimasi AI Professional -->
+            <button type="button" id="ai-generate-btn" class="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs rounded-lg flex items-center space-x-1.5 shadow-md shadow-orange-500/10 active:scale-95 transition-all">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Optimasi AI Premium</span>
             </button>
           </div>
-          
+
           <div class="relative">
-            <textarea id="inputSummary" rows="4" placeholder="Tuliskan perkenalan profesional Anda, capaian utama, serta kontribusi yang dapat Anda tawarkan..." class="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all resize-none"></textarea>
+            <textarea id="input-summary" rows="5" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-brand-500 outline-none transition-all text-sm leading-relaxed" placeholder="Tuliskan deskripsi profesional diri Anda, keahlian utama, dan motivasi karir Anda dalam 3-4 kalimat..."></button></textarea>
             
-            <!-- AI Loading Indicator Overlays -->
-            <div id="aiSummaryLoader" class="hidden absolute inset-0 glass-card rounded-xl flex flex-col items-center justify-center gap-2">
-              <div class="flex gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-brand-600 animate-bounce" style="animation-delay: 0.1s"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-bounce" style="animation-delay: 0.2s"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-violet-600 animate-bounce" style="animation-delay: 0.3s"></span>
+            <!-- Animasi Loading Keren saat "AI" Memperbaiki -->
+            <div id="ai-loader" class="absolute inset-0 bg-white/95 dark:bg-slate-800/95 rounded-xl flex flex-col items-center justify-center space-y-3 hidden transition-all">
+              <div class="relative w-12 h-12">
+                <div class="absolute inset-0 rounded-full border-4 border-slate-200 dark:border-slate-700"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-amber-500 border-t-transparent animate-spin"></div>
               </div>
-              <span class="text-xs font-bold bg-gradient-to-r from-brand-600 to-indigo-500 bg-clip-text text-transparent">AI sedang merangkai kalimat profesional...</span>
+              <p class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest animate-pulse">Menghasilkan CV Profesional via AI...</p>
             </div>
           </div>
+
+          <p class="text-xs text-slate-400 dark:text-slate-500">💡 Klik tombol <strong>Optimasi AI Premium</strong> untuk mencocokkan bidang pekerjaan Anda secara otomatis ke format siap dilirik Rekruter!</p>
         </div>
 
-        <!-- Section 3: Pengalaman Kerja -->
-        <div class="p-6 space-y-4">
-          <div class="flex items-center justify-between pb-2">
-            <div class="flex items-center gap-2">
-              <div class="p-1.5 bg-brand-50 dark:bg-brand-950 rounded-lg text-brand-600 dark:text-brand-400">
-                <i data-lucide="briefcase" class="w-5 h-5"></i>
-              </div>
-              <h3 class="text-md font-bold font-display text-slate-900 dark:text-white">Pengalaman Kerja</h3>
-            </div>
-            <button onclick="addExperienceField()" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah
+        <!-- SECTION 3: PENGALAMAN KERJA (Dinamis) -->
+        <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+          <div class="flex items-center justify-between border-b pb-3 dark:border-slate-700">
+            <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
+              <i data-lucide="briefcase" class="w-5 h-5 text-brand-500"></i>
+              <span>Riwayat Pengalaman Kerja</span>
+            </h2>
+            <button type="button" id="add-experience-btn" class="px-3 py-1.5 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50 font-bold text-xs rounded-lg flex items-center space-x-1 transition-colors">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Tambah</span>
             </button>
           </div>
-          
-          <div id="experienceContainer" class="space-y-4 divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Dynamic Fields Akan Disisipkan di Sini -->
+          <div id="experience-list" class="space-y-4">
+            <!-- Item Pengalaman akan dirender di sini via JS -->
           </div>
         </div>
 
-        <!-- Section 4: Pendidikan -->
-        <div class="p-6 space-y-4">
-          <div class="flex items-center justify-between pb-2">
-            <div class="flex items-center gap-2">
-              <div class="p-1.5 bg-brand-50 dark:bg-brand-950 rounded-lg text-brand-600 dark:text-brand-400">
-                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
-              </div>
-              <h3 class="text-md font-bold font-display text-slate-900 dark:text-white">Pendidikan</h3>
-            </div>
-            <button onclick="addEducationField()" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah
+        <!-- SECTION 4: PENDIDIKAN (Dinamis) -->
+        <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+          <div class="flex items-center justify-between border-b pb-3 dark:border-slate-700">
+            <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
+              <i data-lucide="graduation-cap" class="w-5 h-5 text-brand-500"></i>
+              <span>Riwayat Pendidikan</span>
+            </h2>
+            <button type="button" id="add-education-btn" class="px-3 py-1.5 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50 font-bold text-xs rounded-lg flex items-center space-x-1 transition-colors">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Tambah</span>
             </button>
           </div>
-          
-          <div id="educationContainer" class="space-y-4 divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Dynamic Fields Akan Disisipkan di Sini -->
+          <div id="education-list" class="space-y-4">
+            <!-- Item Pendidikan akan dirender di sini via JS -->
           </div>
         </div>
 
-        <!-- Section 5: Keahlian (Skills) & AI Enhancer -->
-        <div class="p-6 space-y-4">
-          <div class="flex items-center justify-between pb-2">
-            <div class="flex items-center gap-2">
-              <div class="p-1.5 bg-brand-50 dark:bg-brand-950 rounded-lg text-brand-600 dark:text-brand-400">
-                <i data-lucide="cpu" class="w-5 h-5"></i>
-              </div>
-              <h3 class="text-md font-bold font-display text-slate-900 dark:text-white">Keahlian (Skills)</h3>
-            </div>
-            <div class="flex items-center gap-3">
-              <button onclick="improveSkillsWithAI()" class="flex items-center gap-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold py-1 px-2.5 rounded-lg shadow-md cursor-pointer active:scale-95 transition-all">
-                <i data-lucide="sparkles" class="w-3 h-3"></i> AI Skills
-              </button>
-              <button onclick="addSkillField()" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1 cursor-pointer">
-                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah
-              </button>
-            </div>
+        <!-- SECTION 5: KEAHLIAN / SKILLS (Dinamis + Progress Bar) -->
+        <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+          <div class="flex items-center justify-between border-b pb-3 dark:border-slate-700">
+            <h2 class="text-lg font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
+              <i data-lucide="wrench" class="w-5 h-5 text-brand-500"></i>
+              <span>Keahlian & Kompetensi</span>
+            </h2>
+            <button type="button" id="add-skill-btn" class="px-3 py-1.5 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50 font-bold text-xs rounded-lg flex items-center space-x-1 transition-colors">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              <span>Tambah</span>
+            </button>
           </div>
-          
-          <div class="relative">
-            <div id="skillsContainer" class="space-y-3">
-              <!-- Dynamic Fields Akan Disisipkan di Sini -->
-            </div>
-            
-            <!-- AI Loading Loader Overlays -->
-            <div id="aiSkillsLoader" class="hidden absolute inset-0 glass-card rounded-xl flex flex-col items-center justify-center gap-2">
-              <div class="flex gap-1.5">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-bounce" style="animation-delay: 0.1s"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-teal-500 animate-bounce" style="animation-delay: 0.2s"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-600 animate-bounce" style="animation-delay: 0.3s"></span>
-              </div>
-              <span class="text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">Menyusun istilah ATS yang lebih kredibel...</span>
-            </div>
+          <div id="skills-list" class="space-y-3">
+            <!-- Item Keahlian akan dirender di sini via JS -->
           </div>
         </div>
 
-        <!-- Section 6: Sertifikasi & Bahasa -->
-        <div class="p-6 grid grid-cols-2 gap-6">
+        <!-- SECTION 6: BAHASA & SERTIFIKASI (Grid Kolom Sejajar) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
           <!-- Bahasa -->
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <i data-lucide="languages" class="w-4 h-4 text-brand-500"></i> Bahasa
-              </span>
-              <button onclick="addLanguageField()" class="text-[10px] font-bold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer">Tambah</button>
+          <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3 dark:border-slate-700">
+              <h2 class="text-md font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
+                <i data-lucide="languages" class="w-5 h-5 text-brand-500"></i>
+                <span>Bahasa</span>
+              </h2>
+              <button type="button" id="add-language-btn" class="px-2.5 py-1 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50 font-bold text-xs rounded-lg flex items-center space-x-1 transition-colors">
+                <i data-lucide="plus" class="w-3 h-3"></i>
+                <span>Tambah</span>
+              </button>
             </div>
-            <div id="languageContainer" class="space-y-2"></div>
+            <div id="language-list" class="space-y-3">
+              <!-- Render via JS -->
+            </div>
           </div>
 
           <!-- Sertifikasi -->
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <i data-lucide="shield-check" class="w-4 h-4 text-brand-500"></i> Sertifikasi
-              </span>
-              <button onclick="addCertField()" class="text-[10px] font-bold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer">Tambah</button>
+          <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+            <div class="flex items-center justify-between border-b pb-3 dark:border-slate-700">
+              <h2 class="text-md font-bold flex items-center space-x-2 text-slate-800 dark:text-white">
+                <i data-lucide="award" class="w-5 h-5 text-brand-500"></i>
+                <span>Sertifikasi</span>
+              </h2>
+              <button type="button" id="add-certification-btn" class="px-2.5 py-1 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50 font-bold text-xs rounded-lg flex items-center space-x-1 transition-colors">
+                <i data-lucide="plus" class="w-3 h-3"></i>
+                <span>Tambah</span>
+              </button>
             </div>
-            <div id="certContainer" class="space-y-2"></div>
+            <div id="certification-list" class="space-y-3">
+              <!-- Render via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SECTION 7: KATEGORI KUSTOM DINAMIS (Prestasi, Organisasi, Pelatihan) -->
+        <div class="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700/50 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b pb-3 dark:border-slate-700 gap-2">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="folder-plus" class="w-5 h-5 text-brand-500"></i>
+              <h2 class="text-lg font-bold text-slate-800 dark:text-white">Bagian Tambahan Kustom</h2>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+              <select id="custom-category-select" class="text-xs bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1.5 font-semibold">
+                <option value="Organisasi">Organisasi</option>
+                <option value="Prestasi & Penghargaan">Prestasi & Penghargaan</option>
+                <option value="Pelatihan & Kursus">Pelatihan & Kursus</option>
+                <option value="Proyek Sampingan">Proyek Sampingan</option>
+              </select>
+              <button type="button" id="add-custom-btn" class="px-3 py-1.5 bg-brand-50 dark:bg-brand-950/40 text-brand-600 dark:text-brand-400 hover:bg-brand-100 dark:hover:bg-brand-900/50 font-bold text-xs rounded-lg flex items-center space-x-1 transition-colors">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>Tambah</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="custom-section-list" class="space-y-4">
+            <!-- Render via JS -->
           </div>
         </div>
 
-        <!-- Section 7: Kategori Tambahan Baru (Dinamis Manual) -->
-        <div class="p-6 space-y-4">
-          <div class="flex items-center justify-between pb-2">
-            <div class="flex items-center gap-2">
-              <div class="p-1.5 bg-brand-50 dark:bg-brand-950 rounded-lg text-brand-600 dark:text-brand-400">
-                <i data-lucide="folder-plus" class="w-5 h-5"></i>
-              </div>
-              <h3 class="text-md font-bold font-display text-slate-900 dark:text-white">Kategori Tambahan</h3>
-            </div>
-            <button onclick="addCustomSection()" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Kategori
-            </button>
-          </div>
-          
-          <div id="customSectionsContainer" class="space-y-4 divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Dynamic Custom Fields Akan Disisipkan di Sini -->
-          </div>
-        </div>
-
-      </div>
+      </form>
     </section>
 
-    <!-- RIGHT COLUMN: REAL-TIME PREVIEW & PDF ACTIONS (SPAN 7) -->
-    <section class="lg:col-span-7 space-y-4 lg:sticky lg:top-20 w-full">
+    <!-- ==================== SISI KANAN: REAL-TIME PREVIEW ==================== -->
+    <section class="lg:col-span-6 flex flex-col items-center">
       
-      <!-- Action Toolbar -->
-      <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-3 no-print">
-        <div class="flex items-center gap-3">
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Layout CV:</span>
-          <select id="layoutSelect" onchange="changeLayout(this.value)" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
-            <option value="1">Tema 1: Split Modern (Default)</option>
-            <option value="2">Tema 2: Minimalis Premium</option>
-            <option value="3">Tema 3: Eksekutif Klasik</option>
-            <option value="4">Tema 4: Header Berwarna Kontras</option>
-            <option value="5">Tema 5: Clean Border</option>
-          </select>
-        </div>
+      <!-- Panel Sticky agar preview tetap terlihat saat scroll di desktop -->
+      <div class="sticky top-24 w-full flex flex-col items-center space-y-4">
         
-        <div class="flex items-center gap-2">
-          <!-- Button Reset Data -->
-          <button onclick="openResetModal()" class="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/45 text-red-600 dark:text-red-400 text-xs font-bold py-2 px-4 rounded-xl transition-all cursor-pointer">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-            Reset Data
-          </button>
-          
-          <!-- Button Export PDF -->
-          <button onclick="exportToPDF()" class="flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg shadow-brand-600/20 active:scale-95 transition-all cursor-pointer">
-            <i data-lucide="download" class="w-4 h-4"></i>
-            Unduh PDF
-          </button>
+        <div class="w-full flex items-center justify-between px-4 py-2 glassmorphism border border-slate-200 dark:border-slate-800 rounded-2xl">
+          <div class="flex items-center space-x-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Live Preview Real-time (A4)</span>
+          </div>
+          <div class="text-[11px] text-slate-400 font-medium">Auto-saved ke browser lokal</div>
         </div>
-      </div>
 
-      <!-- TEMPLATE PREVIEW PAPER (MOCKUP A4 - RESPONSIVE FOR MOBILE) -->
-      <div class="bg-slate-200 dark:bg-slate-900 p-2 sm:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-x-auto w-full flex justify-start lg:justify-center">
-        
-        <!-- Paper Canvas with Mobile Overflow protection -->
-        <div id="cvPaper" class="bg-white text-slate-900 shadow-xl w-[794px] min-w-[794px] max-w-[794px] min-h-[1120px] p-10 font-sans relative" style="--primary-color: #2563eb;">
-          <!-- Isi CV akan di-render secara dinamis lewat JS berdasarkan pilihan tema -->
+        <!-- AREA KERTAS PREVIEW UTAMA -->
+        <div class="preview-container bg-white text-slate-800 shadow-2xl rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700/40 relative">
+          
+          <!-- Wrapper Skala agar pas dicetak (id untuk ekspor html2pdf) -->
+          <div id="cv-print-area" class="w-full h-full p-8 md:p-10 font-sans text-xs flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <!-- Konten Dinamis di-render via Javascript berdasarkan Template dan Warna yang terpilih -->
+            <div id="render-target-content" class="h-full flex flex-col">
+              <!-- Template dimasukkan otomatis oleh JS -->
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -506,1210 +453,1520 @@
 
   </main>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="glass-card border-t border-slate-200/80 dark:border-slate-800/80 py-4 mt-8 transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400">
-      <p>&copy; 2026 AI Resume Builder. Dibuat dengan cinta untuk masa depan karir Anda.</p>
+  <!-- ==================== MODAL PILIHAN EKSPOR PREMIUM & WATERMARK ==================== -->
+  <div id="download-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-100 dark:border-slate-700/60 shadow-2xl relative transform transition-all duration-300 scale-95 opacity-0" id="modal-card">
+      
+      <!-- Tombol Close -->
+      <button id="close-modal-btn" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center space-y-4">
+        <div class="w-16 h-16 bg-brand-50 dark:bg-brand-950/50 text-brand-500 rounded-2xl flex items-center justify-center mx-auto shadow-md">
+          <i data-lucide="download-cloud" class="w-8 h-8"></i>
+        </div>
+        
+        <div>
+          <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Ekspor CV Profesional</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pilih metode ekspor dokumen ATS-friendly yang Anda butuhkan.</p>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          
+          <!-- Opsi 1: Download Gratis dengan Watermark -->
+          <button id="download-watermark-btn" class="w-full p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-slate-50 dark:hover:bg-slate-700/30 text-left flex items-start space-x-3 group transition-all">
+            <div class="p-2 bg-slate-100 dark:bg-slate-700 group-hover:bg-brand-50 dark:group-hover:bg-brand-950/40 rounded-xl text-slate-600 dark:text-slate-300 group-hover:text-brand-500 transition-colors">
+              <i data-lucide="file-text" class="w-5 h-5"></i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-extrabold text-slate-800 dark:text-slate-200">Unduh Gratis</span>
+                <span class="text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">Dengan Watermark</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">CV diproses cepat dalam 5 detik dengan teks tanda tangan Alur Digital Solusi di bagian bawah.</p>
+            </div>
+          </button>
+
+          <!-- Opsi 2: Tanpa Watermark (Hubungi WA) -->
+          <a href="https://wa.me/6281234567890?text=Halo%20Alur%20Digital%20Solusi%2C%20saya%20tertarik%20dengan%20Resume%20Builder%20Premium%20tanpa%20watermark." target="_blank" class="w-full p-4 rounded-2xl bg-gradient-to-tr from-brand-600 to-cyan-600 hover:from-brand-500 hover:to-cyan-500 text-white text-left flex items-start space-x-3 shadow-lg shadow-brand-500/10 active:scale-[0.98] transition-all">
+            <div class="p-2 bg-white/20 rounded-xl text-white">
+              <i data-lucide="whatsapp" class="w-5 h-5">
+                <!-- SVG Alternatif WhatsApp untuk UI/UX mulus -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              </i>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-extrabold text-white">Versi Pro Tanpa Watermark</span>
+                <span class="text-[9px] font-extrabold text-brand-900 bg-amber-300 px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-bounce">Sangat Murah!</span>
+              </div>
+              <p class="text-[11px] text-white/80 mt-1">Dapatkan CV super bersih tanpa tulisan tanda tangan pihak ketiga. Klik untuk langsung konsultasi via WA.</p>
+            </div>
+          </a>
+
+        </div>
+
+        <p class="text-[10px] text-slate-400 dark:text-slate-500 pt-2 border-t dark:border-slate-700">Dibuat dengan dedikasi tinggi oleh <strong>Alur Digital Solusi</strong> &copy; 2026</p>
+      </div>
+
     </div>
+  </div>
+
+  <!-- Dialog Pop up Toast Notifikasi -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 glassmorphism shadow-2xl rounded-2xl px-5 py-4 border border-emerald-500/30 text-slate-800 dark:text-white flex items-center space-x-3 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="p-2 bg-emerald-500 text-white rounded-xl">
+      <i data-lucide="check" class="w-5 h-5"></i>
+    </div>
+    <div>
+      <h4 class="font-bold text-sm">Berhasil</h4>
+      <p class="text-xs text-slate-500 dark:text-slate-400" id="toast-message">Data Anda disimpan.</p>
+    </div>
+  </div>
+
+  <!-- Footer Website -->
+  <footer class="mt-12 py-6 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-400 dark:text-slate-500">
+    <p>&copy; 2026 <strong>Alur Digital Solusi</strong>. Hak Cipta Dilindungi. Sempurna untuk Tutorial YouTube "Bikin Website Resume Builder AI dengan HTML, CSS, JS".</p>
   </footer>
 
-  <!-- ================= LOGIC JAVASCRIPT ================= -->
+  <!-- ==================== LOGIKA UTAMA JAVASCRIPT ==================== -->
   <script>
-    // --- GLOBAL STATE & CONFIG ---
-    let resumeData = {
-      fullName: '',
-      photo: '',
+    // Inisialisasi Ikon Lucide di awal rendering halaman
+    lucide.createIcons();
+
+    // ==================== STATE MANAJEMEN DATA ====================
+    // Menyimpan seluruh data form CV pengguna agar mudah disinkronkan ke LocalStorage
+    let cvData = {
+      template: 'classic',
+      themeColor: '#0070f3',
+      fullname: '',
+      title: '',
       email: '',
       phone: '',
       address: '',
       linkedin: '',
       website: '',
       summary: '',
+      photo: '', // Menyimpan base64 string dari foto profil
       experiences: [],
       educations: [],
       skills: [],
       languages: [],
       certifications: [],
-      customSections: [] // Kategori tambahan manual
+      customSections: []
     };
 
-    let selectedLayout = "1";
-    let cropper = null;
-    let originalPhotoBase64 = '';
-
-    // --- INITIALIZATION ---
-    window.onload = function() {
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
-      
-      loadFromLocalStorage();
-      setupTheme();
-      setupFormListeners();
-      setupCropperControls();
-      
-      if (!resumeData.fullName) {
-        loadMockData();
-      } else {
-        renderAll();
+    // Database Simulasi AI untuk 10 Profesi Terpopuler di Indonesia
+    // Tanpa memanggil API backend, gratis, andal, aman, dan instan!
+    const aiMockData = {
+      "Senior Frontend Developer": {
+        summary: "Senior Frontend Developer berpengalaman lebih dari 5 tahun dalam membangun aplikasi web modern yang cepat, aman, dan berskala besar. Ahli dalam optimasi performa client-side, arsitektur UI/UX yang responsif, dan integrasi API yang seamless untuk meningkatkan retensi pengguna.",
+        skills: [
+          { name: "React.js & Next.js", level: "95" },
+          { name: "Tailwind CSS & SASS", level: "90" },
+          { name: "TypeScript & ES6+", level: "92" },
+          { name: "RESTful API Integration", level: "88" },
+          { name: "Webpack & Vite Bundling", level: "85" }
+        ]
+      },
+      "Data Analyst": {
+        summary: "Data Analyst profesional yang ahli dalam mentransformasikan data kompleks menjadi insight bisnis strategis yang mudah dipahami. Terbiasa menangani big data untuk riset pasar, efisiensi operasional, dan prediksi tren bisnis menggunakan metode statistik canggih.",
+        skills: [
+          { name: "Python (Pandas, NumPy)", level: "90" },
+          { name: "SQL Database & BigQuery", level: "95" },
+          { name: "Tableau & Power BI", level: "88" },
+          { name: "Analisis Statistik & A/B Testing", level: "85" },
+          { name: "Excel Advanced", level: "90" }
+        ]
+      },
+      "UI/UX Designer": {
+        summary: "UI/UX Designer kreatif berorientasi pada riset pengguna (user-centered design). Memiliki kemampuan merancang wireframe, user flow, dan desain antarmuka interaktif berkualitas tinggi yang menyeimbangkan estetika visual dengan fungsionalitas bisnis.",
+        skills: [
+          { name: "Figma & Adobe XD", level: "95" },
+          { name: "User Research & Usability Testing", level: "88" },
+          { name: "Wireframing & Prototyping", level: "92" },
+          { name: "Design System Architecture", level: "85" },
+          { name: "Mobile App Design Guidelines", level: "90" }
+        ]
+      },
+      "Digital Marketing Specialist": {
+        summary: "Spesialis Pemasaran Digital dengan rekam jejak sukses mengelola kampanye iklan berbayar (paid ads) berskala nasional dengan ROI yang tinggi. Berpengalaman dalam strategi konten, SEO, dan optimasi konversi penjualan digital.",
+        skills: [
+          { name: "Google Ads & Meta Ads", level: "92" },
+          { name: "Search Engine Optimization (SEO)", level: "85" },
+          { name: "Google Analytics 4 & Tag Manager", level: "88" },
+          { name: "Content Marketing Strategy", level: "90" },
+          { name: "Copywriting & Social Media Analytics", level: "85" }
+        ]
+      },
+      "Full Stack Developer": {
+        summary: "Full Stack Engineer berpengalaman merancang arsitektur aplikasi web dari hulu ke hilir. Sangat menguasai interaksi basis data yang aman, pembuatan API yang efisien, serta pengembangan antarmuka pengguna yang sangat responsif.",
+        skills: [
+          { name: "Node.js (Express.js)", level: "90" },
+          { name: "React.js / Vue.js", level: "88" },
+          { name: "MongoDB & PostgreSQL", level: "92" },
+          { name: "Docker & Cloud Deployment", level: "80" },
+          { name: "Keamanan Sistem & JWT Auth", level: "85" }
+        ]
+      },
+      "Human Resources (HRD)": {
+        summary: "Profesional Manajemen Sumber Daya Manusia (HR) yang terampil dalam rekrutmen karyawan, pengembangan budaya organisasi, dan manajemen kinerja tim. Terbukti sukses menyusun kurikulum pelatihan internal untuk meningkatkan produktivitas.",
+        skills: [
+          { name: "Recruitment & Talent Acquisition", level: "95" },
+          { name: "Performance Management (KPI/OKR)", level: "90" },
+          { name: "Employee Relations", level: "85" },
+          { name: "Undang-Undang Ketenagakerjaan", level: "88" },
+          { name: "HRIS Platforms", level: "80" }
+        ]
+      },
+      "Content Creator": {
+        summary: "Kreator Konten Multimedia handal yang fokus pada pertumbuhan audiens digital di berbagai platform sosial media. Memiliki keahlian mendalam dalam video editing, riset algoritma, dan kerja sama branding dengan sponsor lokal maupun global.",
+        skills: [
+          { name: "Adobe Premiere & CapCut Pro", level: "92" },
+          { name: "Social Media Algorithms", level: "88" },
+          { name: "Video Production & Lighting", level: "85" },
+          { name: "Community Management", level: "90" },
+          { name: "Creative Writing / Scripting", level: "85" }
+        ]
+      },
+      "Customer Relation Officer": {
+        summary: "Spesialis Hubungan Pelanggan (CRM) yang penuh empati, berfokus menyelesaikan masalah konsumen secara cepat dan akurat. Mampu meningkatkan skor kepuasan pelanggan (CSAT) melalui komunikasi yang profesional dan solutif.",
+        skills: [
+          { name: "Customer Service & Communication", level: "95" },
+          { name: "CRM Tools (Zendesk, Salesforce)", level: "85" },
+          { name: "Conflict Resolution & Negotiation", level: "90" },
+          { name: "Product Knowledge Management", level: "88" },
+          { name: "Analytical Problem Solving", level: "85" }
+        ]
+      },
+      "Project Manager": {
+        summary: "Manajer Proyek bersertifikasi yang mahir mengendalikan ruang lingkup proyek, tenggat waktu, serta anggaran perusahaan. Memiliki gaya kepemimpinan kolaboratif menggunakan metodologi kerja Agile & Scrum modern.",
+        skills: [
+          { name: "Project Management (Agile/Scrum)", level: "95" },
+          { name: "Budgeting & Resource Planning", level: "88" },
+          { name: "Risk Management & Mitigation", level: "85" },
+          { name: "Jira, Trello, & Asana Tools", level: "90" },
+          { name: "Stakeholder Management", level: "92" }
+        ]
+      },
+      "Graphic Designer": {
+        summary: "Desainer Grafis profesional dengan visualisasi estetis yang kuat dalam menerjemahkan pesan brand ke dalam aset media digital, identitas visual (logo), serta kebutuhan cetak promosi berkualitas tinggi.",
+        skills: [
+          { name: "Adobe Illustrator & Photoshop", level: "95" },
+          { name: "Brand Identity Design", level: "90" },
+          { name: "Layout & Typography Rules", level: "88" },
+          { name: "Vector Art & Illustration", level: "85" },
+          { name: "Creative Brainstorming", level: "90" }
+        ]
       }
     };
 
-    // --- TOAST NOTIFICATION UTILITY ---
-    function showToast(message, type = 'success') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-lg border text-xs font-bold transition-all duration-300 transform translate-y-2 opacity-0`;
-      
-      if (type === 'success') {
-        toast.className += ` bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200 dark:border-emerald-900/50 text-emerald-800 dark:text-emerald-300`;
-        toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> <span>${message}</span>`;
-      } else {
-        toast.className += ` bg-red-50 dark:bg-red-950/80 border-red-200 dark:border-red-900/50 text-red-800 dark:text-red-300`;
-        toast.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4"></i> <span>${message}</span>`;
-      }
-      
-      container.appendChild(toast);
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-      
-      setTimeout(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      }, 50);
+    // ==================== INITIAL LOAD / PENYIAPAN EVENT LISTENER ====================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedData();
+      initTheme();
+      setupEventListeners();
+      renderAllLists();
+      updateCompletionProgress();
+      renderLivePreview();
+    });
 
-      setTimeout(() => {
-        toast.classList.add('translate-y-2', 'opacity-0');
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
-    }
+    // ==================== ELEMEN SELEKTOR DOM ====================
+    const form = document.getElementById('resume-form');
+    const previewContainer = document.getElementById('cv-print-area');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toast-message');
 
-    // --- DIALOG MODAL RESET ---
-    function openResetModal() {
-      document.getElementById('resetModal').classList.remove('hidden');
-    }
+    // ==================== TEMA GELAP / TERANG (Local Storage) ====================
+    const darkToggle = document.getElementById('dark-mode-toggle');
+    const darkIcon = document.getElementById('dark-icon');
+    const lightIcon = document.getElementById('light-icon');
 
-    function closeResetModal() {
-      document.getElementById('resetModal').classList.add('hidden');
-    }
-
-    function confirmResetData() {
-      // Bersihkan model data
-      resumeData = {
-        fullName: '',
-        photo: '',
-        email: '',
-        phone: '',
-        address: '',
-        linkedin: '',
-        website: '',
-        summary: '',
-        experiences: [],
-        educations: [],
-        skills: [],
-        languages: [],
-        certifications: [],
-        customSections: []
-      };
-
-      // Reset form visual
-      document.getElementById('avatarPreview').src = '';
-      document.getElementById('avatarPreview').classList.add('hidden');
-      document.getElementById('avatarPlaceholder').classList.remove('hidden');
-      document.getElementById('btnRemovePhoto').classList.add('hidden');
-      document.getElementById('inputPhoto').value = '';
-
-      autoSave();
-      renderAll();
-      closeResetModal();
-      showToast('Seluruh isian data draf berhasil dikosongkan!');
-    }
-
-    // --- THEME MANAGEMENT (DARK / LIGHT) ---
-    function setupTheme() {
-      const themeToggle = document.getElementById('themeToggle');
-      const sunIcon = document.getElementById('sunIcon');
-      const moonIcon = document.getElementById('moonIcon');
-      
+    function initTheme() {
       if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+        lightIcon.classList.add('hidden');
       } else {
         document.documentElement.classList.remove('dark');
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-      }
-
-      themeToggle.addEventListener('click', () => {
-        if (document.documentElement.classList.contains('dark')) {
-          document.documentElement.classList.remove('dark');
-          localStorage.setItem('theme', 'light');
-          sunIcon.classList.add('hidden');
-          moonIcon.classList.remove('hidden');
-        } else {
-          document.documentElement.classList.add('dark');
-          localStorage.setItem('theme', 'dark');
-          sunIcon.classList.remove('hidden');
-          moonIcon.classList.add('hidden');
-        }
-      });
-    }
-
-    // --- FORM LISTENERS & AUTO SAVE ---
-    function setupFormListeners() {
-      const inputs = [
-        { id: 'inputFullName', key: 'fullName' },
-        { id: 'inputEmail', key: 'email' },
-        { id: 'inputPhone', key: 'phone' },
-        { id: 'inputAddress', key: 'address' },
-        { id: 'inputLinkedin', key: 'linkedin' },
-        { id: 'inputWebsite', key: 'website' },
-        { id: 'inputSummary', key: 'summary' }
-      ];
-
-      inputs.forEach(item => {
-        const element = document.getElementById(item.id);
-        if (element) {
-          element.addEventListener('input', (e) => {
-            resumeData[item.key] = e.target.value;
-            renderPaperLayout();
-            autoSave();
-            updateProgress();
-          });
-        }
-      });
-
-      // Photo Upload Handler with Cropper Modal Trigger
-      const photoInput = document.getElementById('inputPhoto');
-      if (photoInput) {
-        photoInput.addEventListener('change', function(e) {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-              originalPhotoBase64 = event.target.result;
-              openCropperModal(originalPhotoBase64);
-            };
-            reader.readAsDataURL(file);
-          }
-        });
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
       }
     }
 
-    // --- CROPPER MODAL LOGIC (FACE MATCH) ---
-    function openCropperModal(imageSrc) {
-      const cropperImage = document.getElementById('cropperImage');
-      cropperImage.src = imageSrc;
-      document.getElementById('cropperModal').classList.remove('hidden');
-
-      if (cropper) {
-        cropper.destroy();
+    darkToggle.addEventListener('click', () => {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        darkIcon.classList.remove('hidden');
+        lightIcon.classList.add('hidden');
       }
+    });
 
-      // Initialize Cropper.js with 1:1 circular aspect ratio framing
+    // ==================== NOTIFIKASI TOAST CUSTOM ====================
+    function showToast(message) {
+      toastMessage.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
       setTimeout(() => {
-        cropper = new Cropper(cropperImage, {
-          aspectRatio: 1,
-          viewMode: 1,
-          dragMode: 'move',
-          autoCropArea: 0.8,
-          restore: false,
-          guides: true,
-          center: true,
-          highlight: false,
-          cropBoxMovable: true,
-          cropBoxResizable: false,
-          toggleDragModeOnDblclick: false,
-        });
-      }, 100);
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
     }
 
-    function closeCropperModal() {
-      document.getElementById('cropperModal').classList.add('hidden');
-      document.getElementById('inputPhoto').value = ''; // Reset input file
-      if (cropper) {
-        cropper.destroy();
-        cropper = null;
-      }
+    // ==================== PENYIMPANAN DATA & AUTO SAVE (Local Storage) ====================
+    function saveToLocalStorage() {
+      localStorage.setItem('cv_builder_data_2026', JSON.stringify(cvData));
+      updateCompletionProgress();
+      renderLivePreview();
     }
 
-    function setupCropperControls() {
-      document.getElementById('btnZoomIn').addEventListener('click', () => { if(cropper) cropper.zoom(0.1); });
-      document.getElementById('btnZoomOut').addEventListener('click', () => { if(cropper) cropper.zoom(-0.1); });
-      document.getElementById('btnRotate').addEventListener('click', () => { if(cropper) cropper.rotate(90); });
-      
-      document.getElementById('btnCropApply').addEventListener('click', () => {
-        if (!cropper) return;
-        
-        const canvas = cropper.getClippedCanvas({
-          width: 300,
-          height: 300,
-          imageSmoothingEnabled: true,
-          imageSmoothingQuality: 'high',
-        });
-
-        const croppedBase64 = canvas.toDataURL('image/jpeg');
-        
-        // Simpan ke state & visual form
-        resumeData.photo = croppedBase64;
-        
-        document.getElementById('avatarPreview').src = croppedBase64;
-        document.getElementById('avatarPreview').classList.remove('hidden');
-        document.getElementById('avatarPlaceholder').classList.add('hidden');
-        document.getElementById('btnRemovePhoto').classList.remove('hidden');
-
-        // Update preview render
-        renderPaperLayout();
-        autoSave();
-        updateProgress();
-        closeCropperModal();
-        showToast("Pengepasan foto profil wajah berhasil diterapkan!");
-      });
-    }
-
-    function removeProfilePhoto() {
-      resumeData.photo = '';
-      document.getElementById('avatarPreview').src = '';
-      document.getElementById('avatarPreview').classList.add('hidden');
-      document.getElementById('avatarPlaceholder').classList.remove('hidden');
-      document.getElementById('btnRemovePhoto').classList.add('hidden');
-      document.getElementById('inputPhoto').value = '';
-
-      renderPaperLayout();
-      autoSave();
-      updateProgress();
-      showToast("Foto profil berhasil dihapus!");
-    }
-
-    // --- TEMPLATE DESIGN MANAGEMENT ---
-    function changeTemplateColor(colorHex) {
-      const cvPaper = document.getElementById('cvPaper');
-      cvPaper.style.setProperty('--primary-color', colorHex);
-      localStorage.setItem('templateColor', colorHex);
-    }
-
-    function changeLayout(val) {
-      selectedLayout = val;
-      localStorage.setItem('selectedLayout', val);
-      renderPaperLayout();
-      showToast(`Berhasil beralih ke Tema ${val}`);
-    }
-
-    // --- HELPER UNTUK MEMBUAT URL AKTIF DAN AMAN ---
-    function formatUrl(url) {
-      if (!url) return '#';
-      let cleanUrl = url.trim();
-      if (!/^https?:\/\//i.test(cleanUrl)) {
-        cleanUrl = 'https://' + cleanUrl;
-      }
-      return cleanUrl;
-    }
-
-    // --- PROGRESS COMPLETION CALCULATOR ---
-    function updateProgress() {
-      let totalPoints = 11; // Ditambah 1 bobot poin kategori baru
-      let filledPoints = 0;
-
-      if (resumeData.fullName) filledPoints++;
-      if (resumeData.photo) filledPoints++;
-      if (resumeData.email) filledPoints++;
-      if (resumeData.phone) filledPoints++;
-      if (resumeData.summary) filledPoints++;
-      if (resumeData.experiences.length > 0) filledPoints++;
-      if (resumeData.educations.length > 0) filledPoints++;
-      if (resumeData.skills.length > 0) filledPoints++;
-      if (resumeData.languages.length > 0) filledPoints++;
-      if (resumeData.certifications.length > 0) filledPoints++;
-      if (resumeData.customSections.length > 0) filledPoints++;
-
-      const percentage = Math.round((filledPoints / totalPoints) * 100);
-      
-      const progressBar = document.getElementById('progressBar');
-      const progressText = document.getElementById('progressText');
-      
-      progressBar.style.width = percentage + '%';
-      progressText.textContent = percentage + '% Lengkap';
-    }
-
-    // --- LOCAL STORAGE LOGIC ---
-    function autoSave() {
-      localStorage.setItem('ai_resume_data', JSON.stringify(resumeData));
-    }
-
-    function loadFromLocalStorage() {
-      const savedData = localStorage.getItem('ai_resume_data');
-      if (savedData) {
+    function loadSavedData() {
+      const saved = localStorage.getItem('cv_builder_data_2026');
+      if (saved) {
         try {
-          resumeData = JSON.parse(savedData);
+          cvData = JSON.parse(saved);
+          
+          // Sinkronisasi data form basic
+          document.getElementById('input-fullname').value = cvData.fullname || '';
+          document.getElementById('input-title').value = cvData.title || '';
+          document.getElementById('input-email').value = cvData.email || '';
+          document.getElementById('input-phone').value = cvData.phone || '';
+          document.getElementById('input-address').value = cvData.address || '';
+          document.getElementById('input-linkedin').value = cvData.linkedin || '';
+          document.getElementById('input-website').value = cvData.website || '';
+          document.getElementById('input-summary').value = cvData.summary || '';
+
+          // Sinkronisasi Foto Profil
+          if (cvData.photo) {
+            const preview = document.getElementById('photo-preview');
+            const placeholder = document.getElementById('photo-placeholder');
+            const removeBtn = document.getElementById('remove-photo-btn');
+            preview.src = cvData.photo;
+            preview.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+            removeBtn.classList.remove('hidden');
+          }
+
+          // Sinkronisasi Desain Pilihan & Warna
+          updateTemplateSelectionUI();
+          updateColorSelectionUI();
+
         } catch (e) {
-          console.error("Gagal parse data dari local storage", e);
+          console.error("Gagal parsing local storage data", e);
         }
-      }
-
-      const savedColor = localStorage.getItem('templateColor');
-      if (savedColor) {
-        changeTemplateColor(savedColor);
-      }
-
-      const savedLayout = localStorage.getItem('selectedLayout');
-      if (savedLayout) {
-        selectedLayout = savedLayout;
-        document.getElementById('layoutSelect').value = savedLayout;
-      }
-    }
-
-    // --- RENDER SEMUA DATA KE FORM & PREVIEW ---
-    function renderAll() {
-      document.getElementById('inputFullName').value = resumeData.fullName || '';
-      document.getElementById('inputEmail').value = resumeData.email || '';
-      document.getElementById('inputPhone').value = resumeData.phone || '';
-      document.getElementById('inputAddress').value = resumeData.address || '';
-      document.getElementById('inputLinkedin').value = resumeData.linkedin || '';
-      document.getElementById('inputWebsite').value = resumeData.website || '';
-      document.getElementById('inputSummary').value = resumeData.summary || '';
-
-      if (resumeData.photo) {
-        document.getElementById('avatarPreview').src = resumeData.photo;
-        document.getElementById('avatarPreview').classList.remove('hidden');
-        document.getElementById('avatarPlaceholder').classList.add('hidden');
-        document.getElementById('btnRemovePhoto').classList.remove('hidden');
-      }
-
-      renderExperiences();
-      renderEducations();
-      renderSkills();
-      renderLanguages();
-      renderCertifications();
-      renderCustomSections(); // Kategori Baru
-      
-      renderPaperLayout();
-      updateProgress();
-    }
-
-    // --- RENDER MULTI-TEMA LAYOUT CV (TEMA 1 - TEMA 5) ---
-    function renderPaperLayout() {
-      const paper = document.getElementById('cvPaper');
-      paper.innerHTML = '';
-
-      // Fallback Data
-      const name = resumeData.fullName || 'Nama Lengkap';
-      const email = resumeData.email || 'email@kamu.com';
-      const phone = resumeData.phone || '+62 8...';
-      const address = resumeData.address || 'Alamat';
-      const linkedin = resumeData.linkedin || 'linkedin.com/in/...';
-      const website = resumeData.website || 'portfolio.com';
-      const summary = resumeData.summary || 'Deskripsi profile profesional Anda...';
-      const avatarSrc = resumeData.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256';
-      
-      // Hitung Jabatan/Subtitle
-      const subtitle = (resumeData.experiences.length > 0 && resumeData.experiences[0].role) ? resumeData.experiences[0].role : 'Profesional';
-
-      // Builder Isian Pengalaman Kerja
-      let expHTML = '';
-      if (resumeData.experiences.length === 0) {
-        expHTML = `<p class="text-[11px] text-slate-400 italic">Belum ada pengalaman kerja yang ditambahkan.</p>`;
       } else {
-        resumeData.experiences.forEach(exp => {
-          expHTML += `
-            <div class="space-y-1">
-              <div class="flex justify-between items-baseline">
-                <h4 class="text-xs font-bold text-slate-800">${exp.role || 'Jabatan'} <span class="text-slate-400 font-normal">di</span> ${exp.company || 'Perusahaan'}</h4>
-                <span class="text-[10px] font-medium text-slate-500">${exp.period || 'Periode'}</span>
-              </div>
-              <p class="text-[11px] text-slate-600 leading-relaxed text-justify whitespace-pre-line">${exp.desc || 'Tuliskan deskripsi pencapaian karir Anda.'}</p>
-            </div>
-          `;
-        });
-      }
-
-      // Builder Isian Pendidikan
-      let eduHTML = '';
-      if (resumeData.educations.length === 0) {
-        eduHTML = `<p class="text-[11px] text-slate-400 italic">Belum ada pendidikan yang ditambahkan.</p>`;
-      } else {
-        resumeData.educations.forEach(edu => {
-          eduHTML += `
-            <div class="space-y-0.5">
-              <div class="flex justify-between items-baseline">
-                <h4 class="text-xs font-bold text-slate-800">${edu.degree || 'Gelar / Jurusan'}</h4>
-                <span class="text-[10px] font-medium text-slate-500">${edu.year || 'Tahun'}</span>
-              </div>
-              <p class="text-[11px] text-slate-600">${edu.school || 'Nama Sekolah / Universitas'}</p>
-            </div>
-          `;
-        });
-      }
-
-      // Builder Isian Skills
-      let skillsHTML = '';
-      if (resumeData.skills.length === 0) {
-        skillsHTML = `<p class="text-[11px] text-slate-400 italic">Belum ada keahlian ditambahkan.</p>`;
-      } else {
-        resumeData.skills.forEach(sk => {
-          skillsHTML += `
-            <div class="space-y-1">
-              <div class="flex justify-between text-[10px] font-semibold text-slate-700">
-                <span>${sk.name || 'Skill'}</span>
-                <span>${sk.level}%</span>
-              </div>
-              <div class="w-full bg-slate-100 rounded-full h-1 overflow-hidden">
-                <div class="bg-[var(--primary-color)] h-1 rounded-full transition-all duration-300" style="width: ${sk.level}%"></div>
-              </div>
-            </div>
-          `;
-        });
-      }
-
-      // Builder Isian Bahasa
-      let langHTML = '';
-      const validLanguages = resumeData.languages.filter(l => l.trim() !== '');
-      if (validLanguages.length > 0) {
-        langHTML += `<div class="space-y-1.5">`;
-        validLanguages.forEach(lang => {
-          langHTML += `<span class="block text-[11px] font-medium text-slate-600">• ${lang}</span>`;
-        });
-        langHTML += `</div>`;
-      }
-
-      // Builder Isian Sertifikasi
-      let certHTML = '';
-      const validCerts = resumeData.certifications.filter(c => c.trim() !== '');
-      if (validCerts.length > 0) {
-        certHTML += `<ul class="list-disc list-inside text-[11px] text-slate-600 space-y-1">`;
-        validCerts.forEach(cert => {
-          certHTML += `<li>${cert}</li>`;
-        });
-        certHTML += `</ul>`;
-      }
-
-      // Builder Isian Kategori Tambahan Baru (Dinamis Manual)
-      let customSectionsHTML = '';
-      if (resumeData.customSections.length > 0) {
-        resumeData.customSections.forEach(sec => {
-          if (sec.title && sec.content) {
-            customSectionsHTML += `
-              <div class="space-y-2 mt-4 pt-2 border-t border-slate-100">
-                <h3 class="text-xs font-extrabold uppercase tracking-widest text-[var(--primary-color)]">${sec.title}</h3>
-                <div class="h-0.5 w-12 bg-[var(--primary-color)]"></div>
-                <p class="text-[11px] text-slate-600 leading-relaxed text-justify whitespace-pre-line">${sec.content}</p>
-              </div>
-            `;
-          }
-        });
-      }
-
-      // Render Layout berdasarkan Selected Theme
-      if (selectedLayout === "1") {
-        // TEMA 1: MODERN SPLIT (DEFAULT)
-        paper.innerHTML = `
-          <div class="grid grid-cols-12 gap-8">
-            <div class="col-span-4 border-r border-slate-100 pr-6 space-y-6">
-              <div class="flex flex-col items-center text-center">
-                <div class="w-24 h-24 rounded-full bg-slate-100 border-4 border-white shadow-md overflow-hidden mb-3">
-                  <img src="${avatarSrc}" class="w-full h-full object-cover" alt="Profile">
-                </div>
-                <h2 class="text-md font-bold font-display leading-tight text-slate-800">${name}</h2>
-                <p class="text-[10px] font-semibold text-slate-500 mt-1 uppercase tracking-wider">${subtitle}</p>
-              </div>
-              <div class="space-y-3 pt-4 border-t border-slate-100">
-                <h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Kontak</h4>
-                <a href="mailto:${email}" class="flex items-start gap-2 text-xs text-slate-600 hover:underline">
-                  <i data-lucide="mail" class="w-3.5 h-3.5 text-[var(--primary-color)]"></i> <span class="break-all">${email}</span>
-                </a>
-                <a href="tel:${phone}" class="flex items-start gap-2 text-xs text-slate-600 hover:underline">
-                  <i data-lucide="phone" class="w-3.5 h-3.5 text-[var(--primary-color)]"></i> <span>${phone}</span>
-                </a>
-                <div class="flex items-start gap-2 text-xs text-slate-600">
-                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[var(--primary-color)]"></i> <span>${address}</span>
-                </div>
-                <a href="${formatUrl(linkedin)}" target="_blank" class="flex items-start gap-2 text-xs text-slate-600 hover:underline">
-                  <i data-lucide="link" class="w-3.5 h-3.5 text-[var(--primary-color)]"></i> <span class="break-all">${linkedin}</span>
-                </a>
-                <a href="${formatUrl(website)}" target="_blank" class="flex items-start gap-2 text-xs text-slate-600 hover:underline">
-                  <i data-lucide="globe" class="w-3.5 h-3.5 text-[var(--primary-color)]"></i> <span class="break-all">${website}</span>
-                </a>
-              </div>
-              <div class="space-y-3 pt-4 border-t border-slate-100">
-                <h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Keahlian</h4>
-                <div class="space-y-2.5">${skillsHTML}</div>
-              </div>
-              ${validLanguages.length > 0 ? `<div class="space-y-3 pt-4 border-t border-slate-100"><h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Bahasa</h4>${langHTML}</div>` : ''}
-            </div>
-            <div class="col-span-8 space-y-5">
-              <div class="space-y-1.5">
-                <h3 class="text-xs font-extrabold uppercase tracking-widest text-[var(--primary-color)]">Tentang Saya</h3>
-                <div class="h-0.5 w-12 bg-[var(--primary-color)]"></div>
-                <p class="text-[11px] text-slate-600 leading-relaxed text-justify whitespace-pre-line">${summary}</p>
-              </div>
-              <div class="space-y-3">
-                <h3 class="text-xs font-extrabold uppercase tracking-widest text-[var(--primary-color)]">Pengalaman Kerja</h3>
-                <div class="h-0.5 w-12 bg-[var(--primary-color)]"></div>
-                <div class="space-y-4">${expHTML}</div>
-              </div>
-              <div class="space-y-3">
-                <h3 class="text-xs font-extrabold uppercase tracking-widest text-[var(--primary-color)]">Pendidikan</h3>
-                <div class="h-0.5 w-12 bg-[var(--primary-color)]"></div>
-                <div class="space-y-3">${eduHTML}</div>
-              </div>
-              ${validCerts.length > 0 ? `<div class="space-y-3"><h3 class="text-xs font-extrabold uppercase tracking-widest text-[var(--primary-color)]">Sertifikasi</h3><div class="h-0.5 w-12 bg-[var(--primary-color)]"></div>${certHTML}</div>` : ''}
-              ${customSectionsHTML}
-            </div>
-          </div>
-        `;
-      } 
-      else if (selectedLayout === "2") {
-        // TEMA 2: MINIMALIS PREMIUM
-        paper.innerHTML = `
-          <div class="space-y-6">
-            <div class="flex justify-between items-center border-b pb-4">
-              <div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900">${name}</h1>
-                <p class="text-xs font-semibold text-[var(--primary-color)] uppercase tracking-wider mt-1">${subtitle}</p>
-              </div>
-              <div class="w-16 h-16 rounded-full overflow-hidden border">
-                <img src="${avatarSrc}" class="w-full h-full object-cover" alt="Profile">
-              </div>
-            </div>
-            <div class="flex flex-wrap gap-x-5 gap-y-1 text-[10px] text-slate-500 font-medium">
-              <a href="mailto:${email}" class="flex items-center gap-1 hover:underline"><i data-lucide="mail" class="w-3.5 h-3.5"></i> ${email}</a>
-              <a href="tel:${phone}" class="flex items-center gap-1 hover:underline"><i data-lucide="phone" class="w-3.5 h-3.5"></i> ${phone}</a>
-              <div class="flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${address}</div>
-              <a href="${formatUrl(linkedin)}" target="_blank" class="flex items-center gap-1 hover:underline"><i data-lucide="link" class="w-3.5 h-3.5"></i> ${linkedin}</a>
-              <a href="${formatUrl(website)}" target="_blank" class="flex items-center gap-1 hover:underline"><i data-lucide="globe" class="w-3.5 h-3.5"></i> ${website}</a>
-            </div>
-            <div class="grid grid-cols-12 gap-6 pt-2">
-              <div class="col-span-8 space-y-5">
-                <div class="space-y-2">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Profil Singkat</h3>
-                  <p class="text-[11px] text-slate-600 leading-relaxed text-justify whitespace-pre-line">${summary}</p>
-                </div>
-                <div class="space-y-3">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Riwayat Pekerjaan</h3>
-                  <div class="space-y-4">${expHTML}</div>
-                </div>
-                <div class="space-y-3">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Riwayat Pendidikan</h3>
-                  <div class="space-y-3">${eduHTML}</div>
-                </div>
-                ${customSectionsHTML}
-              </div>
-              <div class="col-span-4 space-y-5 pl-4 border-l border-slate-100">
-                <div class="space-y-3">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Keahlian Utama</h3>
-                  <div class="space-y-2.5">${skillsHTML}</div>
-                </div>
-                ${validLanguages.length > 0 ? `<div class="space-y-3"><h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Bahasa</h3>${langHTML}</div>` : ''}
-                ${validCerts.length > 0 ? `<div class="space-y-3"><h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">Sertifikasi</h3>${certHTML}</div>` : ''}
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      else if (selectedLayout === "3") {
-        // TEMA 3: EKSEKUTIF KLASIK
-        paper.innerHTML = `
-          <div class="space-y-6">
-            <div class="text-center border-b-2 border-slate-900 pb-5">
-              <h1 class="text-3xl font-bold uppercase tracking-wide text-slate-900">${name}</h1>
-              <p class="text-xs font-bold text-[var(--primary-color)] uppercase tracking-widest mt-1">${subtitle}</p>
-              <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[10px] text-slate-600 mt-3 font-medium">
-                <a href="mailto:${email}" class="hover:underline">${email}</a> | <span>${phone}</span> | <span>${address}</span> | 
-                <a href="${formatUrl(linkedin)}" target="_blank" class="hover:underline">LinkedIn</a> | 
-                <a href="${formatUrl(website)}" target="_blank" class="hover:underline">Portofolio</a>
-              </div>
-            </div>
-            <div class="space-y-5">
-              <div class="grid grid-cols-12 gap-4">
-                <div class="col-span-3 text-xs font-extrabold uppercase tracking-wider text-slate-800">Tentang Saya</div>
-                <div class="col-span-9 text-[11px] text-slate-600 leading-relaxed text-justify whitespace-pre-line">${summary}</div>
-              </div>
-              <div class="grid grid-cols-12 gap-4 pt-3 border-t">
-                <div class="col-span-3 text-xs font-extrabold uppercase tracking-wider text-slate-800">Pengalaman Kerja</div>
-                <div class="col-span-9 space-y-4">${expHTML}</div>
-              </div>
-              <div class="grid grid-cols-12 gap-4 pt-3 border-t">
-                <div class="col-span-3 text-xs font-extrabold uppercase tracking-wider text-slate-800">Pendidikan</div>
-                <div class="col-span-9 space-y-3">${eduHTML}</div>
-              </div>
-              <div class="grid grid-cols-12 gap-4 pt-3 border-t">
-                <div class="col-span-3 text-xs font-extrabold uppercase tracking-wider text-slate-800">Keahlian</div>
-                <div class="col-span-9 grid grid-cols-2 gap-x-4 gap-y-2">${skillsHTML}</div>
-              </div>
-              ${validCerts.length > 0 ? `
-                <div class="grid grid-cols-12 gap-4 pt-3 border-t">
-                  <div class="col-span-3 text-xs font-extrabold uppercase tracking-wider text-slate-800">Sertifikasi</div>
-                  <div class="col-span-9">${certHTML}</div>
-                </div>
-              ` : ''}
-              ${customSectionsHTML}
-            </div>
-          </div>
-        `;
-      }
-      else if (selectedLayout === "4") {
-        // TEMA 4: HEADER BERWARNA KONTRAS
-        paper.innerHTML = `
-          <div class="space-y-6 -m-10">
-            <!-- Header Banner -->
-            <div class="bg-slate-900 text-white p-10 flex justify-between items-center">
-              <div class="space-y-1">
-                <h1 class="text-2xl font-bold tracking-tight">${name}</h1>
-                <p class="text-xs font-medium text-[var(--primary-color)] uppercase tracking-widest">${subtitle}</p>
-                <div class="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-slate-400 pt-2">
-                  <a href="mailto:${email}" class="hover:underline">${email}</a>
-                  <span>${phone}</span>
-              </div>
-              <div class="w-20 h-20 rounded-xl overflow-hidden border-2 border-slate-700">
-                <img src="${avatarSrc}" class="w-full h-full object-cover" alt="Profile">
-              </div>
-            </div>
-            <!-- Body Content -->
-            <div class="p-10 grid grid-cols-12 gap-6">
-              <div class="col-span-8 space-y-5">
-                <div class="space-y-2">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 border-b">Ringkasan Profil</h3>
-                  <p class="text-[11px] text-slate-600 leading-relaxed text-justify whitespace-pre-line">${summary}</p>
-                </div>
-                <div class="space-y-3">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 border-b">Pengalaman Profesional</h3>
-                  <div class="space-y-4">${expHTML}</div>
-                </div>
-                <div class="space-y-3">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 border-b">Pendidikan</h3>
-                  <div class="space-y-3">${eduHTML}</div>
-                </div>
-                ${customSectionsHTML}
-              </div>
-              <div class="col-span-4 space-y-5">
-                <div class="space-y-3">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 border-b">Kontak & Tautan</h3>
-                  <div class="space-y-2 text-[10px] text-slate-600">
-                    <div class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${address}</div>
-                    <a href="${formatUrl(linkedin)}" target="_blank" class="flex items-center gap-1.5 hover:underline"><i data-lucide="link" class="w-3.5 h-3.5"></i> LinkedIn</a>
-                    <a href="${formatUrl(website)}" target="_blank" class="flex items-center gap-1.5 hover:underline"><i data-lucide="globe" class="w-3.5 h-3.5"></i> Web Portfolio</a>
-                  </div>
-                </div>
-                <div class="space-y-3">
-                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 border-b">Keahlian</h3>
-                  <div class="space-y-2.5">${skillsHTML}</div>
-                </div>
-                ${validLanguages.length > 0 ? `<div class="space-y-3"><h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 border-b">Bahasa</h3>${langHTML}</div>` : ''}
-                ${validCerts.length > 0 ? `<div class="space-y-3"><h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 pb-1 border-b">Sertifikasi</h3>${certHTML}</div>` : ''}
-              </div>
-            </div>
-          </div>
-        `;
-      }
-      else if (selectedLayout === "5") {
-        // TEMA 5: CLEAN BORDER
-        paper.innerHTML = `
-          <div class="border-2 border-slate-200 p-8 space-y-6">
-            <div class="flex items-center gap-6 pb-6 border-b border-slate-100">
-              <div class="w-20 h-20 rounded-full overflow-hidden border">
-                <img src="${avatarSrc}" class="w-full h-full object-cover" alt="Profile">
-              </div>
-              <div class="space-y-1">
-                <h1 class="text-xl font-bold tracking-tight text-slate-900">${name}</h1>
-                <p class="text-xs font-bold text-[var(--primary-color)] uppercase tracking-wider">${subtitle}</p>
-                <div class="flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-slate-500 pt-2 font-medium">
-                  <a href="mailto:${email}" class="flex items-center gap-1 hover:underline">
-                    <i data-lucide="mail" class="w-3.5 h-3.5 text-slate-400"></i> ${email}
-                  </a>
-                  <a href="tel:${phone}" class="flex items-center gap-1 hover:underline">
-                    <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-400"></i> ${phone}
-                  </a>
-                  <div class="flex items-center gap-1">
-                    <i data-lucide="map-pin" class="w-3.5 h-3.5 text-slate-400"></i> ${address}
-                  </div>
-                  <a href="${formatUrl(linkedin)}" target="_blank" class="flex items-center gap-1 hover:underline">
-                    <i data-lucide="link" class="w-3.5 h-3.5 text-slate-400"></i> ${linkedin}
-                  </a>
-                  <a href="${formatUrl(website)}" target="_blank" class="flex items-center gap-1 hover:underline">
-                    <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-400"></i> ${website}
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="space-y-5">
-              <div class="space-y-2">
-                <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-800 flex items-center gap-2">
-                  <span class="w-1.5 h-4 bg-[var(--primary-color)] rounded-full"></span> Profil Profesional
-                </h3>
-                <p class="text-[11px] text-slate-600 leading-relaxed text-justify whitespace-pre-line">${summary}</p>
-              </div>
-              <div class="space-y-3">
-                <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-800 flex items-center gap-2">
-                  <span class="w-1.5 h-4 bg-[var(--primary-color)] rounded-full"></span> Pengalaman Kerja
-                </h3>
-                <div class="space-y-4">${expHTML}</div>
-              </div>
-              <div class="space-y-3">
-                <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-800 flex items-center gap-2">
-                  <span class="w-1.5 h-4 bg-[var(--primary-color)] rounded-full"></span> Pendidikan
-                </h3>
-                <div class="space-y-3">${eduHTML}</div>
-              </div>
-              <div class="grid grid-cols-2 gap-6">
-                <div class="space-y-3">
-                  <h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-800 flex items-center gap-2">
-                    <span class="w-1.5 h-4 bg-[var(--primary-color)] rounded-full"></span> Keahlian
-                  </h3>
-                  <div class="space-y-2.5">${skillsHTML}</div>
-                </div>
-                <div class="space-y-4">
-                  ${validLanguages.length > 0 ? `<div class="space-y-3"><h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-800 flex items-center gap-2"><span class="w-1.5 h-4 bg-[var(--primary-color)] rounded-full"></span> Bahasa</h3>${langHTML}</div>` : ''}
-                  ${validCerts.length > 0 ? `<div class="space-y-3"><h3 class="text-xs font-extrabold uppercase tracking-widest text-slate-800 flex items-center gap-2"><span class="w-1.5 h-4 bg-[var(--primary-color)] rounded-full"></span> Sertifikasi</h3>${certHTML}</div>` : ''}
-                </div>
-              </div>
-              ${customSectionsHTML}
-            </div>
-          </div>
-        `;
-      }
-
-      // Add watermark branding strictly inside the PDF view
-      paper.innerHTML += `
-        <div class="absolute bottom-4 right-10 text-[9px] text-slate-300 font-medium">Dibuat oleh Resume Builder - ALUR DIGITAL SOLUSI</div>
-      `;
-
-      // Re-trigger Lucide Icons render
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
-    }
-
-    // --- DYNAMIC SECTION: EXPERIENCES ---
-    function addExperienceField() {
-      resumeData.experiences.push({ company: '', role: '', period: '', desc: '' });
-      renderExperiences();
-      autoSave();
-      updateProgress();
-    }
-
-    function removeExperienceField(index) {
-      resumeData.experiences.splice(index, 1);
-      renderExperiences();
-      autoSave();
-      updateProgress();
-    }
-
-    function updateExperienceData(index, field, value) {
-      resumeData.experiences[index][field] = value;
-      renderPaperLayout();
-      autoSave();
-    }
-
-    function renderExperiences() {
-      const container = document.getElementById('experienceContainer');
-      container.innerHTML = '';
-
-      resumeData.experiences.forEach((exp, i) => {
-        const div = document.createElement('div');
-        div.className = 'pt-4 first:pt-0 space-y-3';
-        div.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400">Pengalaman #${i + 1}</span>
-            <button onclick="removeExperienceField(${i})" class="text-xs text-red-500 hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
-            </button>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <input type="text" placeholder="Perusahaan" value="${exp.company}" oninput="updateExperienceData(${i}, 'company', this.value)" class="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-            <input type="text" placeholder="Jabatan" value="${exp.role}" oninput="updateExperienceData(${i}, 'role', this.value)" class="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-            <input type="text" placeholder="Periode (e.g. 2024 - Sekarang)" value="${exp.period}" oninput="updateExperienceData(${i}, 'period', this.value)" class="col-span-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-            <textarea placeholder="Deskripsikan pencapaian utama..." rows="2" oninput="updateExperienceData(${i}, 'desc', this.value)" class="col-span-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none resize-none">${exp.desc}</textarea>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // --- DYNAMIC SECTION: EDUCATION ---
-    function addEducationField() {
-      resumeData.educations.push({ school: '', degree: '', year: '' });
-      renderEducations();
-      autoSave();
-      updateProgress();
-    }
-
-    function removeEducationField(index) {
-      resumeData.educations.splice(index, 1);
-      renderEducations();
-      autoSave();
-      updateProgress();
-    }
-
-    function updateEducationData(index, field, value) {
-      resumeData.educations[index][field] = value;
-      renderPaperLayout();
-      autoSave();
-    }
-
-    function renderEducations() {
-      const container = document.getElementById('educationContainer');
-      container.innerHTML = '';
-
-      resumeData.educations.forEach((edu, i) => {
-        const div = document.createElement('div');
-        div.className = 'pt-4 first:pt-0 space-y-3';
-        div.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400">Pendidikan #${i + 1}</span>
-            <button onclick="removeEducationField(${i})" class="text-xs text-red-500 hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
-            </button>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <input type="text" placeholder="Institusi" value="${edu.school}" oninput="updateEducationData(${i}, 'school', this.value)" class="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-            <input type="text" placeholder="Gelar/Jurusan" value="${edu.degree}" oninput="updateEducationData(${i}, 'degree', this.value)" class="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-            <input type="text" placeholder="Tahun Kelulusan (e.g. 2020 - 2024)" value="${edu.year}" oninput="updateEducationData(${i}, 'year', this.value)" class="col-span-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-          </div>
-        `;
-        container.appendChild(div);
-      });
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // --- DYNAMIC SECTION: SKILLS ---
-    function addSkillField(initSkill = '', initLevel = 80) {
-      resumeData.skills.push({ name: initSkill, level: initLevel });
-      renderSkills();
-      autoSave();
-      updateProgress();
-    }
-
-    function removeSkillField(index) {
-      resumeData.skills.splice(index, 1);
-      renderSkills();
-      autoSave();
-      updateProgress();
-    }
-
-    function updateSkillData(index, field, value) {
-      resumeData.skills[index][field] = value;
-      renderPaperLayout();
-      autoSave();
-    }
-
-    function renderSkills() {
-      const container = document.getElementById('skillsContainer');
-      container.innerHTML = '';
-
-      resumeData.skills.forEach((sk, i) => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-2 bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200/50 dark:border-slate-800';
-        div.innerHTML = `
-          <input type="text" placeholder="e.g. JavaScript" value="${sk.name}" oninput="updateSkillData(${i}, 'name', this.value)" class="flex-1 min-w-0 bg-transparent text-xs border-none focus:outline-none focus:ring-0">
-          <div class="flex items-center gap-1.5">
-            <input type="range" min="10" max="100" step="10" value="${sk.level}" oninput="updateSkillData(${i}, 'level', this.value)" class="w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
-            <span class="text-[10px] font-bold text-slate-400 w-6">${sk.level}%</span>
-          </div>
-          <button onclick="removeSkillField(${i})" class="text-red-500 hover:text-red-600 cursor-pointer p-0.5">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        `;
-        container.appendChild(div);
-      });
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // --- DYNAMIC SECTION: LANGUAGES ---
-    function addLanguageField() {
-      resumeData.languages.push('');
-      renderLanguages();
-      autoSave();
-      updateProgress();
-    }
-
-    function removeLanguageField(index) {
-      resumeData.languages.splice(index, 1);
-      renderLanguages();
-      autoSave();
-      updateProgress();
-    }
-
-    function updateLanguageData(index, value) {
-      resumeData.languages[index] = value;
-      renderPaperLayout();
-      autoSave();
-    }
-
-    function renderLanguages() {
-      const container = document.getElementById('languageContainer');
-      container.innerHTML = '';
-
-      resumeData.languages.forEach((lang, i) => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-1.5';
-        div.innerHTML = `
-          <input type="text" placeholder="e.g. Inggris (Fasih)" value="${lang}" oninput="updateLanguageData(${i}, this.value)" class="w-full px-2 py-1 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-          <button onclick="removeLanguageField(${i})" class="text-red-500 p-1 cursor-pointer">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-          </button>
-        `;
-        container.appendChild(div);
-      });
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // --- DYNAMIC SECTION: CERTIFICATIONS ---
-    function addCertField() {
-      resumeData.certifications.push('');
-      renderCertifications();
-      autoSave();
-      updateProgress();
-    }
-
-    function removeCertField(index) {
-      resumeData.certifications.splice(index, 1);
-      renderCertifications();
-      autoSave();
-      updateProgress();
-    }
-
-    function updateCertData(index, value) {
-      resumeData.certifications[index] = value;
-      renderPaperLayout();
-      autoSave();
-    }
-
-    function renderCertifications() {
-      const container = document.getElementById('certContainer');
-      container.innerHTML = '';
-
-      resumeData.certifications.forEach((cert, i) => {
-        const div = document.createElement('div');
-        div.className = 'flex items-center gap-1.5';
-        div.innerHTML = `
-          <input type="text" placeholder="e.g. AWS Cloud Practitioner" value="${cert}" oninput="updateCertData(${i}, this.value)" class="w-full px-2 py-1 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-          <button onclick="removeCertField(${i})" class="text-red-500 p-1 cursor-pointer">
-            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-          </button>
-        `;
-        container.appendChild(div);
-      });
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // --- DYNAMIC SECTION: KATEGORI TAMBAHAN BARU ---
-    function addCustomSection() {
-      resumeData.customSections.push({ title: '', content: '' });
-      renderCustomSections();
-      autoSave();
-      updateProgress();
-    }
-
-    function removeCustomSection(index) {
-      resumeData.customSections.splice(index, 1);
-      renderCustomSections();
-      autoSave();
-      updateProgress();
-    }
-
-    function updateCustomSectionData(index, field, value) {
-      resumeData.customSections[index][field] = value;
-      renderPaperLayout();
-      autoSave();
-    }
-
-    function renderCustomSections() {
-      const container = document.getElementById('customSectionsContainer');
-      container.innerHTML = '';
-
-      resumeData.customSections.forEach((sec, i) => {
-        const div = document.createElement('div');
-        div.className = 'pt-4 first:pt-0 space-y-3';
-        div.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-slate-400">Kategori Tambahan #${i + 1}</span>
-            <button onclick="removeCustomSection(${i})" class="text-xs text-red-500 hover:underline flex items-center gap-1 cursor-pointer">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus
-            </button>
-          </div>
-          <div class="grid grid-cols-1 gap-3">
-            <input type="text" placeholder="Nama Kategori (e.g. Prestasi, Pelatihan, Organisasi)" value="${sec.title}" oninput="updateCustomSectionData(${i}, 'title', this.value)" class="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-            <textarea placeholder="Tulis rincian konten atau pencapaian kategori tambahan di sini..." rows="3" oninput="updateCustomSectionData(${i}, 'content', this.value)" class="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none resize-none">${sec.content}</textarea>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    }
-
-    // --- MOCK DATA FOR DEMO ---
-    function loadMockData() {
-      resumeData = {
-        fullName: "Afifah Albiruni",
-        photo: "",
-        email: "afifah.albiruni@developer.com",
-        phone: "+62 812-3456-7890",
-        address: "Jakarta, Indonesia",
-        linkedin: "linkedin.com/in/afifahalbiruni",
-        website: "afifahalbiruni.dev",
-        summary: "Seorang Senior Frontend Engineer yang bersemangat dalam membangun antarmuka web modern, interaktif, dan performan tinggi. Ahli dalam merancang ekosistem kode yang clean, scalable, serta berkolaborasi erat dengan tim UI/UX untuk menciptakan pengalaman digital SaaS kelas dunia.",
-        experiences: [
-          {
-            company: "Tech Global Solution",
-            role: "Senior Frontend Developer",
-            period: "2024 - Sekarang",
-            desc: "• Memimpin migrasi arsitektur monolit ke Micro-Frontend berbasis React, mengoptimalkan kecepatan load hingga 40%.\n• Berkolaborasi merancang Design System internal yang digunakan oleh 5 tim produk."
-          },
-          {
-            company: "Creative Digital Agency",
-            role: "Frontend Engineer",
-            period: "2022 - 2024",
-            desc: "• Membangun dan merilis lebih dari 15 website responsif premium dengan integrasi animasi smooth.\n• Mengoptimalkan skor SEO dan aksesibilitas (A11y) situs klien mencapai rata-rata 98% di Lighthouse."
-          }
-        ],
-        educations: [
-          {
-            school: "Universitas Indonesia",
-            degree: "S1 Teknik Informatika",
-            year: "2018 - 2022"
-          }
-        ],
-        skills: [
-          { name: "React & Next.js", level: 95 },
-          { name: "JavaScript ES6+", level: 90 },
-          { name: "Tailwind CSS & UI/UX", level: 95 },
-          { name: "Performance Optimization", level: 85 }
-        ],
-        languages: ["Indonesia (Native)", "Inggris (Profesional)"],
-        certifications: ["Google UX Design Professional Certificate", "AWS Certified Cloud Practitioner"],
-        customSections: [
-          {
-            title: "Prestasi",
-            content: "• Juara 1 Nasional Hackathon HackFest 2023 dalam kategori Solusi FinTech.\n• Pembicara Tamu di Meetup Komunitas Frontend Indonesia 2025."
-          }
-        ]
-      };
-
-      renderAll();
-      autoSave();
-    }
-
-    // --- AI SIMULATION: IMPROVE SUMMARY ---
-    function improveSummaryWithAI() {
-      const summaryText = resumeData.summary || '';
-      const loader = document.getElementById('aiSummaryLoader');
-      
-      loader.classList.remove('hidden');
-
-      setTimeout(() => {
-        let improvedText = "";
-        
-        if (summaryText.length < 15) {
-          improvedText = "Profesional berdedikasi tinggi dengan rekam jejak teruji dalam merancang strategi inovatif, memimpin kolaborasi tim lintas divisi, serta fokus pada akselerasi pertumbuhan bisnis secara efisien. Memiliki keahlian analitis yang kuat serta berkomitmen penuh untuk memberikan dampak nyata yang berkelanjutan bagi perusahaan.";
-        } else {
-          improvedText = "Profesional yang dinamis dan berorientasi pada hasil dengan fokus kuat pada keunggulan eksekusi. Berpengalaman dalam menerjemahkan visi strategis menjadi hasil nyata melalui metodologi kerja yang terstruktur dan kolaboratif. Terampil dalam menganalisis tantangan kompleks serta berdedikasi tinggi untuk memberikan nilai tambah berkelanjutan dalam pertumbuhan organisasi.";
-        }
-
-        resumeData.summary = improvedText;
-        document.getElementById('inputSummary').value = improvedText;
-        
-        renderPaperLayout();
-        loader.classList.add('hidden');
-        
-        autoSave();
-        updateProgress();
-        showToast("Rangkuman karir berhasil dipoles dengan kecerdasan AI!");
-      }, 1800);
-    }
-
-    // --- AI SIMULATION: IMPROVE SKILLS ---
-    function improveSkillsWithAI() {
-      if (resumeData.skills.length === 0) {
-        addSkillField('Modern JavaScript (ES6+)', 90);
-        addSkillField('Advanced UI/UX Architecture', 85);
-        return;
-      }
-
-      const loader = document.getElementById('aiSkillsLoader');
-      loader.classList.remove('hidden');
-
-      setTimeout(() => {
-        const aiSkillDictionary = {
-          'html': 'Semantic HTML5 & Web Standards',
-          'css': 'Advanced Responsive Layouts (CSS Grid/Flex)',
-          'js': 'Modern JavaScript Ecosystem (ES6+)',
-          'javascript': 'Modern ES6+ JavaScript & State Management',
-          'react': 'React.js Architecture & Next.js Framework',
-          'vue': 'Vue.js Ecosystem & Composition API',
-          'design': 'Human-Centered UI/UX Design System',
-          'figma': 'Component-Driven Figma Prototyping',
-          'git': 'Version Control (Git/GitHub Enterprise)',
-          'python': 'Python Software Engineering & Data Automation',
-          'php': 'Backend Engineering & RESTful API Integration'
+        // Data Dummy Awal agar website langsung terlihat keren saat pertama kali dibuka!
+        cvData = {
+          template: 'classic',
+          themeColor: '#0070f3',
+          fullname: 'Bagus Alur',
+          title: 'Senior Frontend Developer',
+          email: 'bagus@alurdigitalsolusi.com',
+          phone: '+62 812 3456 7890',
+          address: 'Jakarta, Indonesia',
+          linkedin: 'linkedin.com/in/bagusalur',
+          website: 'alurdigitalsolusi.com',
+          summary: 'Software Engineer berpengalaman lebih dari 5 tahun merancang arsitektur web modern yang responsif dan berkinerja tinggi. Sangat terampil dalam HTML5, CSS3, JavaScript modern, serta mengoptimalkan pengalaman pengguna di ranah digital.',
+          photo: '',
+          experiences: [
+            { company: 'PT Alur Digital Solusi', role: 'Lead Frontend Developer', duration: '2023 - Sekarang', desc: 'Memimpin tim pengembang beranggotakan 6 orang untuk mendesain ulang platform SaaS utama perusahaan dan berhasil meningkatkan kepuasan pengguna sebesar 40%.' }
+          ],
+          educations: [
+            { school: 'Universitas Indonesia', degree: 'Sarjana Ilmu Komputer', duration: '2015 - 2019', score: 'IPK 3.82' }
+          ],
+          skills: [
+            { name: 'JavaScript ES6+', level: '95' },
+            { name: 'Tailwind CSS & UI UX', level: '90' },
+            { name: 'Arsitektur Web Aman', level: '85' }
+          ],
+          languages: [
+            { name: 'Bahasa Indonesia', proficiency: 'Native' },
+            { name: 'Bahasa Inggris', proficiency: 'Professional' }
+          ],
+          certifications: [
+            { name: 'Google UX Design Professional Certificate' }
+          ],
+          customSections: [
+            { category: 'Prestasi', title: 'Juara 1 Web Development Hackathon Nasional 2024' }
+          ]
         };
 
-        resumeData.skills = resumeData.skills.map(sk => {
-          const lowerName = sk.name.toLowerCase().trim();
-          let optimizedName = sk.name;
+        // Isi ke form
+        document.getElementById('input-fullname').value = cvData.fullname;
+        document.getElementById('input-title').value = cvData.title;
+        document.getElementById('input-email').value = cvData.email;
+        document.getElementById('input-phone').value = cvData.phone;
+        document.getElementById('input-address').value = cvData.address;
+        document.getElementById('input-linkedin').value = cvData.linkedin;
+        document.getElementById('input-website').value = cvData.website;
+        document.getElementById('input-summary').value = cvData.summary;
+        
+        updateTemplateSelectionUI();
+        updateColorSelectionUI();
+      }
+    }
 
-          for (const [key, premiumName] of Object.entries(aiSkillDictionary)) {
-            if (lowerName.includes(key)) {
-              optimizedName = premiumName;
-              break;
-            }
+    // ==================== PERHITUNGAN PROGRESS BAR (%) ====================
+    function updateCompletionProgress() {
+      let score = 0;
+      let total = 100;
+
+      if (cvData.fullname) score += 10;
+      if (cvData.title) score += 5;
+      if (cvData.email) score += 10;
+      if (cvData.phone) score += 10;
+      if (cvData.address) score += 5;
+      if (cvData.summary) score += 15;
+      if (cvData.photo) score += 10;
+      if (cvData.experiences.length > 0) score += 15;
+      if (cvData.educations.length > 0) score += 10;
+      if (cvData.skills.length > 0) score += 10;
+
+      // Maksimalisasi skor pada 100%
+      const percentage = Math.min(score, total);
+      
+      document.getElementById('completion-text').textContent = percentage + '%';
+      document.getElementById('completion-bar').style.width = percentage + '%';
+      document.getElementById('completion-bar-mobile').style.width = percentage + '%';
+    }
+
+    // ==================== HANDLER EVENT LISTENER FORM INPUT ====================
+    function setupEventListeners() {
+      
+      // Sinkronisasi instan input teks biasa ke state data
+      const textBindings = [
+        { id: 'input-fullname', key: 'fullname' },
+        { id: 'input-title', key: 'title' },
+        { id: 'input-email', key: 'email' },
+        { id: 'input-phone', key: 'phone' },
+        { id: 'input-address', key: 'address' },
+        { id: 'input-linkedin', key: 'linkedin' },
+        { id: 'input-website', key: 'website' },
+        { id: 'input-summary', key: 'summary' }
+      ];
+
+      textBindings.forEach(binding => {
+        const inputEl = document.getElementById(binding.id);
+        inputEl.addEventListener('input', (e) => {
+          cvData[binding.key] = e.target.value;
+          saveToLocalStorage();
+        });
+      });
+
+      // Pemotong & Handler Foto Profil Aman
+      const photoInput = document.getElementById('photo-input');
+      const photoPreview = document.getElementById('photo-preview');
+      const photoPlaceholder = document.getElementById('photo-placeholder');
+      const removePhotoBtn = document.getElementById('remove-photo-btn');
+
+      photoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 2 * 1024 * 1024) {
+            showToast("Ukuran foto maksimal adalah 2MB!");
+            return;
           }
 
-          let newLevel = Math.min(sk.level + 10, 100);
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            const img = new Image();
+            img.onload = function() {
+              // Teknik Canvas client-side cropping 1:1 gratis, aman, dan instan!
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d');
+              const size = Math.min(img.width, img.height);
+              canvas.width = size;
+              canvas.height = size;
+              
+              // Potong bagian tengah foto secara seimbang
+              ctx.drawImage(img, (img.width - size)/2, (img.height - size)/2, size, size, 0, 0, size, size);
+              const croppedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+              
+              cvData.photo = croppedBase64;
+              photoPreview.src = croppedBase64;
+              photoPreview.classList.remove('hidden');
+              photoPlaceholder.classList.add('hidden');
+              removePhotoBtn.classList.remove('hidden');
+              
+              saveToLocalStorage();
+              showToast("Foto profil berhasil dipotong 1x1!");
+            };
+            img.src = evt.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
 
-          return { name: optimizedName, level: newLevel };
+      removePhotoBtn.addEventListener('click', () => {
+        cvData.photo = '';
+        photoPreview.src = '';
+        photoPreview.classList.add('hidden');
+        photoPlaceholder.classList.remove('hidden');
+        removePhotoBtn.classList.add('hidden');
+        photoInput.value = '';
+        saveToLocalStorage();
+        showToast("Foto profil dihapus.");
+      });
+
+      // Tombol Tambah Riwayat Dinamis
+      document.getElementById('add-experience-btn').addEventListener('click', () => addExperienceItem());
+      document.getElementById('add-education-btn').addEventListener('click', () => addEducationItem());
+      document.getElementById('add-skill-btn').addEventListener('click', () => addSkillItem());
+      document.getElementById('add-language-btn').addEventListener('click', () => addLanguageItem());
+      document.getElementById('add-certification-btn').addEventListener('click', () => addCertificationItem());
+      document.getElementById('add-custom-btn').addEventListener('click', () => addCustomItem());
+
+      // Selector Template & Warna
+      document.querySelectorAll('.template-selector').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          cvData.template = e.target.getAttribute('data-template');
+          updateTemplateSelectionUI();
+          saveToLocalStorage();
         });
+      });
 
-        renderSkills();
-        renderPaperLayout();
-        loader.classList.add('hidden');
+      document.querySelectorAll('.color-selector').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          cvData.themeColor = e.target.getAttribute('data-color');
+          updateColorSelectionUI();
+          saveToLocalStorage();
+        });
+      });
+
+      // Reset Button Handler
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        if (confirm("Apakah Anda yakin ingin menghapus semua data CV Anda? Tindakan ini tidak bisa dibatalkan.")) {
+          localStorage.removeItem('cv_builder_data_2026');
+          location.reload();
+        }
+      });
+
+      // Simulasi "AI" Generator Sesuai Bidang Pekerjaan saat ini
+      const aiBtn = document.getElementById('ai-generate-btn');
+      const aiLoader = document.getElementById('ai-loader');
+
+      aiBtn.addEventListener('click', () => {
+        const jobTitle = document.getElementById('input-title').value.trim();
         
-        autoSave();
-        updateProgress();
-        showToast("Daftar keahlian berhasil diterjemahkan ke format standard rekruter!");
-      }, 1500);
+        // Deteksi profesi yang cocok dari database statis kita
+        let matchedProfession = "Senior Frontend Developer"; // Default fallback
+        const titlesInDb = Object.keys(aiMockData);
+        
+        const found = titlesInDb.find(title => jobTitle.toLowerCase().includes(title.toLowerCase()) || title.toLowerCase().includes(jobTitle.toLowerCase()));
+        if (found) {
+          matchedProfession = found;
+        }
+
+        const dataProfesi = aiMockData[matchedProfession];
+
+        // Tampilkan animasi loading keren
+        aiLoader.classList.remove('hidden');
+        aiBtn.disabled = true;
+
+        setTimeout(() => {
+          // Isi data AI tiruan ke form secara visual dan simpan ke state data
+          cvData.summary = dataProfesi.summary;
+          document.getElementById('input-summary').value = dataProfesi.summary;
+
+          // Tambahkan keahlian modern yang cocok
+          cvData.skills = [...dataProfesi.skills];
+          
+          aiLoader.classList.add('hidden');
+          aiBtn.disabled = false;
+
+          renderAllLists();
+          saveToLocalStorage();
+          showToast(`CV Anda berhasil dioptimalkan untuk bidang ${matchedProfession}!`);
+        }, 1500); // Simulasi pemrosesan AI 1.5 detik
+      });
+
+      // MODAL EKSPOR PDF MANAGEMENT
+      const modal = document.getElementById('download-modal');
+      const modalContainer = document.getElementById('modal-card');
+      const openModalBtn = document.getElementById('open-download-modal');
+      const closeModalBtn = document.getElementById('close-modal-btn');
+      const downloadWatermarkBtn = document.getElementById('download-watermark-btn');
+
+      openModalBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modalContainer.classList.remove('scale-95', 'opacity-0');
+          modalContainer.classList.add('scale-100', 'opacity-100');
+        }, 10);
+      });
+
+      function closeModal() {
+        modalContainer.classList.remove('scale-100', 'opacity-100');
+        modalContainer.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 300);
+      }
+
+      closeModalBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+
+      // Ekspor PDF Sebenarnya dengan html2pdf.js gratis
+      downloadWatermarkBtn.addEventListener('click', () => {
+        closeModal();
+        showToast("Sedang memproses PDF Anda...");
+
+        // Elemen kontainer cetak
+        const element = document.getElementById('cv-print-area');
+        
+        // Buat watermark visual sementara di area cetak sebelum dikonversi
+        const watermark = document.createElement('div');
+        watermark.className = "flex items-center justify-between mt-4 pt-3 border-t border-slate-200/50 text-slate-400 text-[9px] font-medium italic";
+        watermark.innerHTML = `
+          <span>Dibuat Gratis via Resume Builder - Alur Digital Solusi</span>
+          <span>CV Profesional 2026 - ATS Friendly</span>
+        `;
+        element.appendChild(watermark);
+
+        const opt = {
+          margin: 0,
+          filename: `CV_${cvData.fullname.replace(/\s+/g, '_') || 'Resume'}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // Jalankan library html2pdf
+        html2pdf().from(element).set(opt).save().then(() => {
+          // Hapus kembali watermark dari preview setelah selesai di-ekspor
+          element.removeChild(watermark);
+          showToast("CV Anda berhasil diunduh!");
+        }).catch(err => {
+          console.error(err);
+          // Hapus watermark jika terjadi error
+          if(element.contains(watermark)) element.removeChild(watermark);
+          showToast("Gagal mengunduh PDF. Silakan coba kembali.");
+        });
+      });
+
     }
 
-    // --- EXPORT & WATERMARK POPUP MANAGEMENT ---
-    function exportToPDF() {
-      // Tampilkan modal WA untuk penawaran premium hapus watermark
-      document.getElementById('waModal').classList.remove('hidden');
+    // ==================== FUNGSI MEMUTAKHIRKAN UI SELEKTOR ====================
+    function updateTemplateSelectionUI() {
+      document.querySelectorAll('.template-selector').forEach(btn => {
+        const val = btn.getAttribute('data-template');
+        if (val === cvData.template) {
+          btn.className = "template-selector px-3 py-2 text-xs font-semibold rounded-lg border-2 border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-brand-600 dark:text-brand-400";
+        } else {
+          btn.className = "template-selector px-3 py-2 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700";
+        }
+      });
     }
 
-    function closeWaModal() {
-      document.getElementById('waModal').classList.add('hidden');
+    function updateColorSelectionUI() {
+      document.querySelectorAll('.color-selector').forEach(btn => {
+        const col = btn.getAttribute('data-color');
+        if (col === cvData.themeColor) {
+          btn.className = `color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 ring-2 ring-brand-500 active:scale-95 transition-transform`;
+          btn.style.backgroundColor = col;
+        } else {
+          btn.className = `color-selector w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 hover:ring-2 hover:ring-slate-400 active:scale-95 transition-transform`;
+          btn.style.backgroundColor = col;
+        }
+      });
     }
 
-    function downloadWithWatermark() {
-      closeWaModal();
-      triggerActualPDFDownload();
+    // ==================== RENDERING DAFTAR INPUT DINAMIS ====================
+    function renderAllLists() {
+      renderExperienceList();
+      renderEducationList();
+      renderSkillsList();
+      renderLanguageList();
+      renderCertificationList();
+      renderCustomSectionList();
     }
 
-    function contactWhatsApp() {
-      // Format pesan penawaran kustom (Bayar sukarela/traktir kopi)
-      const waNumber = "6281234567890"; // Ganti dengan nomor WA admin Anda
-      const text = `Halo, saya ingin memesan CV premium yang bersih tanpa watermark. Berikut saya kirimkan draf CV draf saya atas nama: ${resumeData.fullName || 'User'}. Saya bersedia memberikan donasi seikhlasnya (sekadar traktir kopi) jika file PDF bersihnya sudah dikirimkan kembali. Terima kasih!`;
-      const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
+    // RIWAYAT PENGALAMAN KERJA
+    function renderExperienceList() {
+      const container = document.getElementById('experience-list');
+      container.innerHTML = '';
       
-      // Buka WA di tab baru
-      window.open(url, '_blank');
-      closeWaModal();
-      
-      // Jalankan proses download draf otomatis agar pengguna bisa melampirkan draf PDF tersebut ke WA
-      triggerActualPDFDownload();
+      cvData.experiences.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "p-4 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40 space-y-3 relative";
+        div.innerHTML = `
+          <button type="button" onclick="deleteExperienceItem(${index})" class="absolute top-3 right-3 text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-4 h-4"></i></button>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Nama Perusahaan</label>
+              <input type="text" value="${item.company || ''}" oninput="updateExperienceItem(${index}, 'company', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: PT GoTo Gojek Tokopedia">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Jabatan / Role</label>
+              <input type="text" value="${item.role || ''}" oninput="updateExperienceItem(${index}, 'role', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: Senior UI Designer">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Durasi Kerja</label>
+              <input type="text" value="${item.duration || ''}" oninput="updateExperienceItem(${index}, 'duration', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Jan 2022 - Des 2024 / Sekarang">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Deskripsi Tanggung Jawab & Prestasi</label>
+              <textarea rows="2" oninput="updateExperienceItem(${index}, 'desc', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Tuliskan kontribusi Anda yang diukur dengan data kuantitatif jika memungkinkan...">${item.desc || ''}</textarea>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
     }
 
-    function triggerActualPDFDownload() {
-      const element = document.getElementById('cvPaper');
-      
-      const opt = {
-        margin:       0,
-        filename:     `${resumeData.fullName || 'Resume'}_CV_ATS.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      
-      showToast("Memproses ekspor PDF beresolusi tinggi...");
+    function addExperienceItem() {
+      cvData.experiences.push({ company: '', role: '', duration: '', desc: '' });
+      renderExperienceList();
+      saveToLocalStorage();
     }
+
+    function updateExperienceItem(index, field, value) {
+      cvData.experiences[index][field] = value;
+      saveToLocalStorage();
+    }
+
+    window.deleteExperienceItem = function(index) {
+      cvData.experiences.splice(index, 1);
+      renderExperienceList();
+      saveToLocalStorage();
+    };
+
+    // RIWAYAT PENDIDIKAN
+    function renderEducationList() {
+      const container = document.getElementById('education-list');
+      container.innerHTML = '';
+
+      cvData.educations.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "p-4 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40 space-y-3 relative";
+        div.innerHTML = `
+          <button type="button" onclick="deleteEducationItem(${index})" class="absolute top-3 right-3 text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-4 h-4"></i></button>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Nama Institusi / Sekolah</label>
+              <input type="text" value="${item.school || ''}" oninput="updateEducationItem(${index}, 'school', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: Universitas Gadjah Mada">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Gelar / Bidang Studi</label>
+              <input type="text" value="${item.degree || ''}" oninput="updateEducationItem(${index}, 'degree', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: S1 Rekayasa Perangkat Lunak">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Periode Studi</label>
+              <input type="text" value="${item.duration || ''}" oninput="updateEducationItem(${index}, 'duration', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="2020 - 2024">
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Nilai Akhir (IPK/UAN)</label>
+              <input type="text" value="${item.score || ''}" oninput="updateEducationItem(${index}, 'score', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: IPK 3.90/4.00">
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addEducationItem() {
+      cvData.educations.push({ school: '', degree: '', duration: '', score: '' });
+      renderEducationList();
+      saveToLocalStorage();
+    }
+
+    function updateEducationItem(index, field, value) {
+      cvData.educations[index][field] = value;
+      saveToLocalStorage();
+    }
+
+    window.deleteEducationItem = function(index) {
+      cvData.educations.splice(index, 1);
+      renderEducationList();
+      saveToLocalStorage();
+    };
+
+    // KEAHLIAN / SKILLS
+    function renderSkillsList() {
+      const container = document.getElementById('skills-list');
+      container.innerHTML = '';
+
+      cvData.skills.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center space-x-3 bg-slate-50/50 dark:bg-slate-900/40 p-2.5 rounded-xl border border-slate-100 dark:border-slate-700/60";
+        div.innerHTML = `
+          <input type="text" value="${item.name || ''}" oninput="updateSkillItem(${index}, 'name', this.value)" class="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Keahlian (Contoh: Javascript)">
+          <div class="w-32 flex items-center space-x-2">
+            <input type="range" min="0" max="100" value="${item.level || '50'}" oninput="updateSkillItem(${index}, 'level', this.value)" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-500">
+            <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 w-8 text-right">${item.level || '50'}%</span>
+          </div>
+          <button type="button" onclick="deleteSkillItem(${index})" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addSkillItem() {
+      cvData.skills.push({ name: '', level: '80' });
+      renderSkillsList();
+      saveToLocalStorage();
+    }
+
+    function updateSkillItem(index, field, value) {
+      cvData.skills[index][field] = value;
+      saveToLocalStorage();
+    }
+
+    window.deleteSkillItem = function(index) {
+      cvData.skills.splice(index, 1);
+      renderSkillsList();
+      saveToLocalStorage();
+    };
+
+    // BAHASA
+    function renderLanguageList() {
+      const container = document.getElementById('language-list');
+      container.innerHTML = '';
+
+      cvData.languages.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center space-x-2 bg-slate-50/50 dark:bg-slate-900/40 p-2 rounded-xl border border-slate-100 dark:border-slate-700";
+        div.innerHTML = `
+          <input type="text" value="${item.name || ''}" oninput="updateLanguageItem(${index}, 'name', this.value)" class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Inggris/Mandarin">
+          <input type="text" value="${item.proficiency || ''}" oninput="updateLanguageItem(${index}, 'proficiency', this.value)" class="w-24 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Skor / Level">
+          <button type="button" onclick="deleteLanguageItem(${index})" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-3.5 h-3.5"></i></button>
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addLanguageItem() {
+      cvData.languages.push({ name: '', proficiency: '' });
+      renderLanguageList();
+      saveToLocalStorage();
+    }
+
+    function updateLanguageItem(index, field, value) {
+      cvData.languages[index][field] = value;
+      saveToLocalStorage();
+    }
+
+    window.deleteLanguageItem = function(index) {
+      cvData.languages.splice(index, 1);
+      renderLanguageList();
+      saveToLocalStorage();
+    };
+
+    // SERTIFIKASI
+    function renderCertificationList() {
+      const container = document.getElementById('certification-list');
+      container.innerHTML = '';
+
+      cvData.certifications.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center space-x-2 bg-slate-50/50 dark:bg-slate-900/40 p-2 rounded-xl border border-slate-100 dark:border-slate-700";
+        div.innerHTML = `
+          <input type="text" value="${item.name || ''}" oninput="updateCertificationItem(${index}, 'name', this.value)" class="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Nama Sertifikasi">
+          <button type="button" onclick="deleteCertificationItem(${index})" class="text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-3.5 h-3.5"></i></button>
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addCertificationItem() {
+      cvData.certifications.push({ name: '' });
+      renderCertificationList();
+      saveToLocalStorage();
+    }
+
+    function updateCertificationItem(index, field, value) {
+      cvData.certifications[index][field] = value;
+      saveToLocalStorage();
+    }
+
+    window.deleteCertificationItem = function(index) {
+      cvData.certifications.splice(index, 1);
+      renderCertificationList();
+      saveToLocalStorage();
+    };
+
+    // BAGIAN DINAMIS TAMBAHAN KUSTOM
+    function renderCustomSectionList() {
+      const container = document.getElementById('custom-section-list');
+      container.innerHTML = '';
+
+      cvData.customSections.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "p-4 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/40 space-y-2 relative";
+        div.innerHTML = `
+          <button type="button" onclick="deleteCustomItem(${index})" class="absolute top-3 right-3 text-rose-500 hover:text-rose-700"><i data-lucide="trash" class="w-4 h-4"></i></button>
+          <div class="grid grid-cols-1 gap-2">
+            <div>
+              <span class="inline-block text-[9px] font-extrabold bg-brand-100 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 px-2.5 py-1 rounded-md uppercase tracking-wider mb-2">${item.category}</span>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase">Judul & Penjelasan Singkat</label>
+              <textarea rows="2" oninput="updateCustomItem(${index}, 'title', this.value)" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs" placeholder="Contoh: Menjadi koordinator divisi humas dalam kegiatan pengabdian sosial tingkat provinsi...">${item.title || ''}</textarea>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+
+    function addCustomItem() {
+      const select = document.getElementById('custom-category-select');
+      const chosenCat = select.value;
+      cvData.customSections.push({ category: chosenCat, title: '' });
+      renderCustomSectionList();
+      saveToLocalStorage();
+    }
+
+    function updateCustomItem(index, field, value) {
+      cvData.customSections[index][field] = value;
+      saveToLocalStorage();
+    }
+
+    window.deleteCustomItem = function(index) {
+      cvData.customSections.splice(index, 1);
+      renderCustomSectionList();
+      saveToLocalStorage();
+    };
+
+    // ==================== RENDERING LIVE PREVIEW (7 TEMPLATE PILIHAN) ====================
+    function renderLivePreview() {
+      const target = document.getElementById('render-target-content');
+      target.innerHTML = '';
+
+      // Tampilkan template terpilih sesuai data state
+      switch (cvData.template) {
+        case 'classic':
+          renderClassicTemplate(target);
+          break;
+        case 'modern-sidebar':
+          renderModernSidebarTemplate(target);
+          break;
+        case 'elegant-serif':
+          renderElegantSerifTemplate(target);
+          break;
+        case 'tech-developer':
+          renderTechDeveloperTemplate(target);
+          break;
+        case 'creative-split':
+          renderCreativeSplitTemplate(target);
+          break;
+        case 'academic-clean':
+          renderAcademicCleanTemplate(target);
+          break;
+        default:
+          renderClassicTemplate(target);
+      }
+    }
+
+    // --- TEMPLATE 1: CLASSIC EXECUTIVE (Default) ---
+    function renderClassicTemplate(target) {
+      const color = cvData.themeColor;
+      
+      // Bagian Header Atas
+      const headerHtml = `
+        <div class="flex items-start justify-between border-b-2 pb-5 mb-5" style="border-color: ${color};">
+          <div class="flex-1 min-w-0 pr-4">
+            <h1 class="text-xl font-bold uppercase tracking-wider" style="color: #1e293b;">${cvData.fullname || 'NAMA LENGKAP'}</h1>
+            <p class="text-xs font-bold mt-1 uppercase" style="color: ${color};">${cvData.title || 'PEKERJAAN IMPIAN'}</p>
+            <p class="text-[10px] text-slate-500 mt-2 leading-relaxed max-w-xl">${cvData.summary || 'Tuliskan deskripsi ringkasan profesional Anda.'}</p>
+          </div>
+          ${cvData.photo ? `
+            <div class="w-20 h-20 bg-slate-100 rounded-lg overflow-hidden border-2" style="border-color: ${color}; flex-shrink: 0;">
+              <img src="${cvData.photo}" class="w-full h-full object-cover">
+            </div>
+          ` : ''}
+        </div>
+      `;
+
+      // Bagian Kontak & Info Sosial
+      const contacts = [];
+      if (cvData.email) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">✉</span> ${cvData.email}</span>`);
+      if (cvData.phone) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">☏</span> ${cvData.phone}</span>`);
+      if (cvData.address) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">📍</span> ${cvData.address}</span>`);
+      if (cvData.linkedin) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">in/</span> ${cvData.linkedin}</span>`);
+      if (cvData.website) contacts.push(`<span class="flex items-center"><span style="color:${color}; font-weight:bold; margin-right:4px;">🌐</span> ${cvData.website}</span>`);
+
+      const contactHtml = contacts.length > 0 ? `
+        <div class="flex flex-wrap gap-x-5 gap-y-2 text-[10px] text-slate-600 mb-5 pb-3 border-b border-slate-150">
+          ${contacts.join('')}
+        </div>
+      ` : '';
+
+      // Render Kolom Konten Utama
+      const contentHtml = `
+        <div class="grid grid-cols-12 gap-6 flex-1">
+          
+          <!-- Sisi Kiri: Pengalaman, Pendidikan, Bagian Tambahan -->
+          <div class="col-span-8 space-y-5">
+            
+            <!-- Pengalaman Kerja -->
+            <div>
+              <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">PENGALAMAN KERJA</h2>
+              <div class="mt-3 space-y-3">
+                ${cvData.experiences.length > 0 ? cvData.experiences.map(exp => `
+                  <div>
+                    <div class="flex justify-between items-start">
+                      <span class="font-bold text-slate-800">${exp.role || 'Nama Jabatan'}</span>
+                      <span class="text-[9px] text-slate-400 font-semibold">${exp.duration || 'Periode'}</span>
+                    </div>
+                    <p class="text-[10px] font-bold" style="color: ${color};">${exp.company || 'Nama Perusahaan'}</p>
+                    <p class="text-[9px] text-slate-500 mt-1 leading-relaxed">${exp.desc || 'Tanggung jawab pekerjaan...'}</p>
+                  </div>
+                `).join('') : '<p class="text-[10px] text-slate-400 italic">Belum ada pengalaman kerja.</p>'}
+              </div>
+            </div>
+
+            <!-- Pendidikan -->
+            <div>
+              <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">PENDIDIKAN</h2>
+              <div class="mt-3 space-y-3">
+                ${cvData.educations.length > 0 ? cvData.educations.map(edu => `
+                  <div>
+                    <div class="flex justify-between items-start">
+                      <span class="font-bold text-slate-800">${edu.school || 'Nama Institusi'}</span>
+                      <span class="text-[9px] text-slate-400 font-semibold">${edu.duration || 'Periode'}</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] mt-0.5 text-slate-600">
+                      <span>${edu.degree || 'Gelar / Jurusan'}</span>
+                      <span class="font-bold">${edu.score || ''}</span>
+                    </div>
+                  </div>
+                `).join('') : '<p class="text-[10px] text-slate-400 italic">Belum ada riwayat pendidikan.</p>'}
+              </div>
+            </div>
+
+            <!-- Bagian Kustom -->
+            ${cvData.customSections.length > 0 ? `
+              <div>
+                <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">INFORMASI TAMBAHAN</h2>
+                <div class="mt-3 space-y-3">
+                  ${cvData.customSections.map(item => `
+                    <div>
+                      <span class="inline-block text-[8px] font-bold bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded uppercase tracking-wider mb-1">${item.category}</span>
+                      <p class="text-[9px] text-slate-600 leading-relaxed">${item.title || ''}</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+          </div>
+
+          <!-- Sisi Kanan Sidebar: Skills, Bahasa, Sertifikasi -->
+          <div class="col-span-4 space-y-5 border-l border-slate-150 pl-5">
+            
+            <!-- Skills / Keahlian -->
+            <div>
+              <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">KEAHLIAN</h2>
+              <div class="mt-3 space-y-2">
+                ${cvData.skills.length > 0 ? cvData.skills.map(skill => `
+                  <div>
+                    <div class="flex justify-between text-[9px] font-medium text-slate-700 mb-0.5">
+                      <span>${skill.name || 'Keahlian'}</span>
+                      <span>${skill.level || '50'}%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-1 rounded-full overflow-hidden">
+                      <div class="h-full rounded-full" style="width: ${skill.level || '50'}%; background-color: ${color};"></div>
+                    </div>
+                  </div>
+                `).join('') : '<p class="text-[10px] text-slate-400 italic">Belum ada keahlian.</p>'}
+              </div>
+            </div>
+
+            <!-- Bahasa -->
+            <div>
+              <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">BAHASA</h2>
+              <div class="mt-3 space-y-1.5 text-[10px] text-slate-600">
+                ${cvData.languages.length > 0 ? cvData.languages.map(lang => `
+                  <div class="flex justify-between">
+                    <span class="font-semibold text-slate-800">${lang.name || 'Bahasa'}</span>
+                    <span class="italic text-slate-400 text-[9px]">${lang.proficiency || ''}</span>
+                  </div>
+                `).join('') : '<p class="text-[10px] text-slate-400 italic">Belum ada bahasa.</p>'}
+              </div>
+            </div>
+
+            <!-- Sertifikasi -->
+            <div>
+              <h2 class="text-[11px] font-extrabold uppercase tracking-widest pb-1 border-b" style="color: ${color}; border-color: ${color}40;">SERTIFIKASI</h2>
+              <ul class="mt-3 space-y-1.5 text-[9px] text-slate-600 list-disc list-inside">
+                ${cvData.certifications.length > 0 ? cvData.certifications.map(cert => `
+                  <li>${cert.name || 'Nama Sertifikasi'}</li>
+                `).join('') : '<p class="text-[10px] text-slate-400 italic">Belum ada sertifikasi.</p>'}
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+      target.innerHTML = headerHtml + contactHtml + contentHtml;
+    }
+
+    // --- TEMPLATE 2: MODERN SIDEBAR ---
+    function renderModernSidebarTemplate(target) {
+      const color = cvData.themeColor;
+      
+      const renderHtml = `
+        <div class="grid grid-cols-12 gap-6 h-full flex-1">
+          <!-- Kolom Kiri: Sidebar Solid Berwarna -->
+          <div class="col-span-4 -m-8 mr-0 p-6 flex flex-col justify-between" style="background-color: #f8fafc; border-right: 1px solid #e2e8f0;">
+            <div class="space-y-6">
+              <!-- Foto Profil Bulat -->
+              ${cvData.photo ? `
+                <div class="w-24 h-24 rounded-full overflow-hidden border-4 mx-auto" style="border-color: ${color};">
+                  <img src="${cvData.photo}" class="w-full h-full object-cover">
+                </div>
+              ` : `
+                <div class="w-24 h-24 rounded-full bg-slate-200 mx-auto flex items-center justify-center text-slate-400">
+                  <span class="text-xs font-bold">1x1</span>
+                </div>
+              `}
+
+              <!-- Informasi Kontak -->
+              <div class="space-y-3">
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wider" style="color: ${color};">Hubungi Saya</h3>
+                <div class="space-y-2 text-[9px] text-slate-600">
+                  ${cvData.email ? `<div><p class="font-bold">Email:</p><p>${cvData.email}</p></div>` : ''}
+                  ${cvData.phone ? `<div><p class="font-bold">Telepon:</p><p>${cvData.phone}</p></div>` : ''}
+                  ${cvData.address ? `<div><p class="font-bold">Domisili:</p><p>${cvData.address}</p></div>` : ''}
+                  ${cvData.linkedin ? `<div><p class="font-bold">LinkedIn:</p><p>${cvData.linkedin}</p></div>` : ''}
+                  ${cvData.website ? `<div><p class="font-bold">Portofolio:</p><p>${cvData.website}</p></div>` : ''}
+                </div>
+              </div>
+
+              <!-- Keahlian -->
+              <div class="space-y-3">
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wider" style="color: ${color};">Keahlian</h3>
+                <div class="space-y-2">
+                  ${cvData.skills.map(skill => `
+                    <div>
+                      <div class="flex justify-between text-[8px] font-semibold text-slate-600 mb-0.5">
+                        <span>${skill.name}</span>
+                        <span>${skill.level}%</span>
+                      </div>
+                      <div class="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
+                        <div class="h-full rounded-full" style="width: ${skill.level}%; background-color: ${color};"></div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="text-[8px] text-slate-400 italic text-center">ATS Optimized Document</div>
+          </div>
+
+          <!-- Kolom Kanan: Detail Deskripsi CV -->
+          <div class="col-span-8 pl-4 space-y-5">
+            <div>
+              <h1 class="text-2xl font-black uppercase tracking-tight text-slate-800">${cvData.fullname || 'NAMA LENGKAP'}</h1>
+              <p class="text-xs font-extrabold uppercase tracking-wide mt-1" style="color: ${color};">${cvData.title || 'PEKERJAAN IMPIAN'}</p>
+              <div class="w-12 h-1 mt-2 rounded" style="background-color: ${color};"></div>
+            </div>
+
+            <!-- Ringkasan -->
+            <div>
+              <h2 class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Tentang Saya</h2>
+              <p class="text-[10px] text-slate-600 mt-1.5 leading-relaxed">${cvData.summary || 'Ketik ringkasan profil Anda di sini.'}</p>
+            </div>
+
+            <!-- Pengalaman Kerja -->
+            <div>
+              <h2 class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Pengalaman Kerja</h2>
+              <div class="mt-2.5 space-y-3">
+                ${cvData.experiences.map(exp => `
+                  <div class="border-l-2 pl-3 py-0.5" style="border-color: ${color}50;">
+                    <div class="flex justify-between text-[10px]">
+                      <span class="font-bold text-slate-800">${exp.role}</span>
+                      <span class="text-slate-400 text-[8px]">${exp.duration}</span>
+                    </div>
+                    <p class="text-[9px] font-bold" style="color: ${color};">${exp.company}</p>
+                    <p class="text-[9px] text-slate-500 mt-1 leading-relaxed">${exp.desc}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Pendidikan -->
+            <div>
+              <h2 class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Pendidikan</h2>
+              <div class="mt-2.5 space-y-2">
+                ${cvData.educations.map(edu => `
+                  <div class="flex justify-between items-start text-[10px]">
+                    <div>
+                      <p class="font-bold text-slate-800">${edu.school}</p>
+                      <p class="text-[9px] text-slate-500">${edu.degree}</p>
+                    </div>
+                    <div class="text-right">
+                      <p class="text-slate-400 text-[8px]">${edu.duration}</p>
+                      <p class="font-bold text-[8px]" style="color: ${color};">${edu.score}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      target.innerHTML = renderHtml;
+    }
+
+    // --- TEMPLATE 3: ELEGANT SERIF (Premium Look) ---
+    function renderElegantSerifTemplate(target) {
+      const color = cvData.themeColor;
+      
+      const renderHtml = `
+        <div class="font-serif h-full flex flex-col justify-between" style="color: #27272a;">
+          
+          <!-- Bagian Centered Header -->
+          <div class="text-center pb-6 border-b border-zinc-200">
+            <h1 class="text-3xl font-elegant tracking-wide text-zinc-900">${cvData.fullname || 'Nama Lengkap'}</h1>
+            <p class="text-xs font-serif italic uppercase tracking-wider mt-1" style="color: ${color};">${cvData.title || 'Pekerjaan Impian'}</p>
+            
+            <!-- Kontak Sejajar Garis -->
+            <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[9px] text-zinc-500 mt-3 font-sans">
+              ${cvData.email ? `<span>${cvData.email}</span>` : ''}
+              ${cvData.phone ? `<span>&bull; ${cvData.phone}</span>` : ''}
+              ${cvData.address ? `<span>&bull; ${cvData.address}</span>` : ''}
+              ${cvData.linkedin ? `<span>&bull; linkedin: ${cvData.linkedin}</span>` : ''}
+            </div>
+          </div>
+
+          <!-- Ringkasan Profil -->
+          <div class="mt-5 text-center px-4">
+            <p class="text-[10px] italic leading-relaxed text-zinc-600">"${cvData.summary || 'Ringkasan profesional yang elegan.'}"</p>
+          </div>
+
+          <!-- Dua Kolom Serif -->
+          <div class="grid grid-cols-12 gap-6 mt-6 flex-1 text-left font-serif">
+            
+            <!-- Pengalaman & Pendidikan (Kiri) -->
+            <div class="col-span-8 space-y-5">
+              <div>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest border-b pb-1 mb-3 text-zinc-800">Riwayat Pengalaman</h3>
+                <div class="space-y-3">
+                  ${cvData.experiences.map(exp => `
+                    <div>
+                      <div class="flex justify-between items-baseline text-[9px]">
+                        <span class="font-bold text-zinc-900">${exp.role}</span>
+                        <span class="text-[8px] text-zinc-400 italic">${exp.duration}</span>
+                      </div>
+                      <p class="text-[9px] italic" style="color: ${color};">${exp.company}</p>
+                      <p class="text-[9px] text-zinc-600 mt-1 leading-relaxed font-sans">${exp.desc}</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest border-b pb-1 mb-3 text-zinc-800">Pendidikan</h3>
+                <div class="space-y-2">
+                  ${cvData.educations.map(edu => `
+                    <div>
+                      <div class="flex justify-between items-baseline text-[9px]">
+                        <span class="font-bold text-zinc-900">${edu.school}</span>
+                        <span class="text-[8px] text-zinc-400 italic">${edu.duration}</span>
+                      </div>
+                      <p class="text-[9px] text-zinc-600 font-sans">${edu.degree} &mdash; ${edu.score}</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Skills, Sertifikat, Kustom (Kanan) -->
+            <div class="col-span-4 space-y-5 border-l border-zinc-100 pl-5">
+              <div>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest border-b pb-1 mb-3 text-zinc-800">Kompetensi</h3>
+                <ul class="space-y-2 text-[9px] text-zinc-600 font-sans">
+                  ${cvData.skills.map(skill => `
+                    <li>
+                      <div class="flex justify-between">
+                        <span>${skill.name}</span>
+                        <span class="font-bold">${skill.level}%</span>
+                      </div>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+
+              <div>
+                <h3 class="text-[10px] font-bold uppercase tracking-widest border-b pb-1 mb-3 text-zinc-800">Sertifikat</h3>
+                <ul class="space-y-1 text-[8px] text-zinc-500 font-sans list-disc list-inside">
+                  ${cvData.certifications.map(c => `<li>${c.name}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+      target.innerHTML = renderHtml;
+    }
+
+    // --- TEMPLATE 4: TECH DEVELOPER (Modern & Minimalist, Perfect for Engineers) ---
+    function renderTechDeveloperTemplate(target) {
+      const color = cvData.themeColor;
+      
+      const renderHtml = `
+        <div class="font-mono h-full flex flex-col justify-between" style="color: #0f172a; background-color: #fafafa;">
+          
+          <!-- Terminal-like Header -->
+          <div class="bg-slate-900 -m-8 mr-0 ml-0 p-5 mb-5 rounded-t-lg text-white relative">
+            <div class="absolute top-3 left-4 flex space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            </div>
+            <div class="text-center">
+              <h1 class="text-lg font-bold">${cvData.fullname || 'developer@resume'}</h1>
+              <p class="text-[10px] text-emerald-400 mt-1">&gt; ${cvData.title || 'software engineer'}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-12 gap-6 flex-1 text-left">
+            <!-- Kolom Konten Kiri (Keahlian & Kontak) -->
+            <div class="col-span-4 space-y-5">
+              <div>
+                <h3 class="text-[9px] font-extrabold text-slate-400 tracking-wider border-b pb-1 uppercase mb-2">[$] CONTACT_INFO</h3>
+                <div class="space-y-1.5 text-[8px] text-slate-600">
+                  ${cvData.email ? `<p><span class="text-emerald-600">email:</span> ${cvData.email}</p>` : ''}
+                  ${cvData.phone ? `<p><span class="text-emerald-600">phone:</span> ${cvData.phone}</p>` : ''}
+                  ${cvData.address ? `<p><span class="text-emerald-600">addr:</span> ${cvData.address}</p>` : ''}
+                  ${cvData.linkedin ? `<p><span class="text-emerald-600">link:</span> ${cvData.linkedin}</p>` : ''}
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-[9px] font-extrabold text-slate-400 tracking-wider border-b pb-1 uppercase mb-2">[*] TECH_STACK</h3>
+                <div class="space-y-2">
+                  ${cvData.skills.map(skill => `
+                    <div>
+                      <div class="flex justify-between text-[8px] text-slate-700">
+                        <span>${skill.name}</span>
+                        <span>[${skill.level}%]</span>
+                      </div>
+                      <div class="w-full bg-slate-200 h-1">
+                        <div class="h-full bg-slate-800" style="width: ${skill.level}%;"></div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <!-- Kolom Konten Kanan (Riwayat Kerja & Belajar) -->
+            <div class="col-span-8 space-y-5">
+              <div>
+                <h3 class="text-[9px] font-extrabold text-slate-400 tracking-wider border-b pb-1 uppercase mb-2">[#] PROFESSIONAL_LOG</h3>
+                <div class="space-y-3">
+                  ${cvData.experiences.map(exp => `
+                    <div>
+                      <p class="text-[9px] font-bold text-slate-800">&gt;&nbsp;${exp.role} <span class="text-emerald-600">@ ${exp.company}</span></p>
+                      <p class="text-[8px] text-slate-400 italic">${exp.duration}</p>
+                      <p class="text-[8px] text-slate-600 mt-1 leading-relaxed">${exp.desc}</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-[9px] font-extrabold text-slate-400 tracking-wider border-b pb-1 uppercase mb-2">[#] EDUCATION_LOG</h3>
+                <div class="space-y-2">
+                  ${cvData.educations.map(edu => `
+                    <div class="text-[8px]">
+                      <p class="font-bold text-slate-800">&gt;&nbsp;${edu.school}</p>
+                      <p class="text-slate-500">${edu.degree} | ${edu.score} (${edu.duration})</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      `;
+      target.innerHTML = renderHtml;
+    }
+
+    // --- TEMPLATE 5: CREATIVE SPLIT (Dynamic Grid Layout) ---
+    function renderCreativeSplitTemplate(target) {
+      const color = cvData.themeColor;
+      
+      const renderHtml = `
+        <div class="h-full flex flex-col justify-between" style="color: #334155;">
+          
+          <!-- Banner Atas Creative -->
+          <div class="flex items-center space-x-4 pb-5 border-b-2" style="border-color: ${color};">
+            ${cvData.photo ? `
+              <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 flex-shrink-0" style="border-color: ${color};">
+                <img src="${cvData.photo}" class="w-full h-full object-cover">
+              </div>
+            ` : ''}
+            <div>
+              <h1 class="text-xl font-extrabold tracking-tight text-slate-900">${cvData.fullname || 'Nama Kreatif'}</h1>
+              <p class="text-xs font-bold text-white px-2 py-0.5 rounded inline-block mt-1" style="background-color: ${color};">${cvData.title || 'Pekerjaan Kreatif'}</p>
+            </div>
+          </div>
+
+          <!-- Section Deskripsi Panjang -->
+          <div class="py-4 border-b border-slate-100">
+            <p class="text-[10px] leading-relaxed text-slate-600">${cvData.summary || 'Tulis ringkasan portofolio kreatif Anda.'}</p>
+          </div>
+
+          <!-- Creative Grid Layout -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1 mt-4 text-left">
+            
+            <!-- Box Pengalaman Kerja -->
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
+              <h3 class="text-[10px] font-extrabold uppercase tracking-wide flex items-center" style="color: ${color};">
+                <span class="w-1.5 h-3 rounded-sm mr-1.5" style="background-color: ${color};"></span>
+                <span>Karir Profesional</span>
+              </h3>
+              <div class="space-y-3 text-[9px]">
+                ${cvData.experiences.map(exp => `
+                  <div>
+                    <p class="font-bold text-slate-800">${exp.role}</p>
+                    <p class="text-slate-500 font-semibold">${exp.company} (${exp.duration})</p>
+                    <p class="text-slate-500 mt-1 leading-relaxed">${exp.desc}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Box Pendidikan & Kompetensi -->
+            <div class="space-y-4">
+              
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wide flex items-center" style="color: ${color};">
+                  <span class="w-1.5 h-3 rounded-sm mr-1.5" style="background-color: ${color};"></span>
+                  <span>Akademis</span>
+                </h3>
+                <div class="space-y-2 text-[9px]">
+                  ${cvData.educations.map(edu => `
+                    <div>
+                      <p class="font-bold text-slate-800">${edu.school}</p>
+                      <p class="text-slate-500">${edu.degree} &bull; ${edu.score}</p>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-2">
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wide flex items-center" style="color: ${color};">
+                  <span class="w-1.5 h-3 rounded-sm mr-1.5" style="background-color: ${color};"></span>
+                  <span>Keahlian</span>
+                </h3>
+                <div class="flex flex-wrap gap-1.5">
+                  ${cvData.skills.map(skill => `
+                    <span class="text-[8px] font-bold bg-white border px-2 py-1 rounded-md shadow-sm">${skill.name}</span>
+                  `).join('')}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      `;
+      target.innerHTML = renderHtml;
+    }
+
+    // --- TEMPLATE 6: ACADEMIC CLEAN (Pure Minimalist, Highly ATS-Friendly) ---
+    function renderAcademicCleanTemplate(target) {
+      const color = cvData.themeColor;
+      
+      const renderHtml = `
+        <div class="font-serif h-full flex flex-col justify-between" style="color: #111827; background-color: #ffffff;">
+          
+          <!-- Pure Text Header -->
+          <div class="text-center pb-4 border-b">
+            <h1 class="text-2xl font-bold uppercase tracking-wide">${cvData.fullname || 'Nama Lengkap'}</h1>
+            <p class="text-xs italic text-slate-600 mt-1">${cvData.title || 'Bidang Akademis / Penelitian'}</p>
+            
+            <div class="flex flex-wrap justify-center gap-x-4 gap-y-1 text-[9px] text-slate-500 mt-2 font-sans">
+              ${cvData.email ? `<span>Email: ${cvData.email}</span>` : ''}
+              ${cvData.phone ? `<span>| Telp: ${cvData.phone}</span>` : ''}
+              ${cvData.address ? `<span>| Domisili: ${cvData.address}</span>` : ''}
+            </div>
+          </div>
+
+          <!-- Academic Content Layout -->
+          <div class="mt-5 space-y-4 text-left">
+            
+            <!-- Pendidikan Paling Utama di Akademis -->
+            <div>
+              <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Pendidikan Terakhir</h3>
+              <div class="mt-2 space-y-2 text-[9px]">
+                ${cvData.educations.map(edu => `
+                  <div class="flex justify-between font-bold">
+                    <span>${edu.school} &mdash; ${edu.degree}</span>
+                    <span class="text-slate-400 font-normal">${edu.duration}</span>
+                  </div>
+                  <p class="text-[8px] text-slate-500 -mt-1">Indeks Prestasi Kumulatif: ${edu.score}</p>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Publikasi / Pengalaman Penelitian -->
+            <div>
+              <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Pengalaman Kerja & Organisasi</h3>
+              <div class="mt-2 space-y-3 text-[9px]">
+                ${cvData.experiences.map(exp => `
+                  <div>
+                    <div class="flex justify-between font-bold">
+                      <span>${exp.role} @ ${exp.company}</span>
+                      <span class="text-slate-400 font-normal">${exp.duration}</span>
+                    </div>
+                    <p class="text-slate-600 mt-1 leading-relaxed font-sans">${exp.desc}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Sertifikasi & Kompetensi -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Keahlian Riset</h3>
+                <ul class="list-disc list-inside mt-2 text-[8px] text-slate-600 font-sans space-y-1">
+                  ${cvData.skills.map(s => `<li>${s.name}</li>`).join('')}
+                </ul>
+              </div>
+              
+              <div>
+                <h3 class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 border-b pb-0.5">Sertifikasi Ilmiah</h3>
+                <ul class="list-disc list-inside mt-2 text-[8px] text-slate-600 font-sans space-y-1">
+                  ${cvData.certifications.map(c => `<li>${c.name}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+      target.innerHTML = renderHtml;
+    }
+
   </script>
 </body>
 </html>
